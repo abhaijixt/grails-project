@@ -1,0 +1,71 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.grails.org/grails/core" }
+    }
+    dependencies {
+        classpath "org.grails:grails-gradle-plugin:6.1.2"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:4.3.0"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.7.18"
+    }
+}
+
+group = "com.learning.bookstore"
+version = "1.0.0"
+
+repositories {
+    mavenCentral()
+    maven { url "https://repo.grails.org/grails/core" }
+}
+
+configurations {
+    profile
+    console
+}
+
+apply plugin: "eclipse"
+apply plugin: "idea"
+apply plugin: "org.grails.grails-web"
+apply plugin: "org.grails.grails-gsp"
+apply plugin: "com.bertramlabs.asset-pipeline"
+apply plugin: "war"
+
+dependencies {
+    profile "org.grails.profiles:web"
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+    implementation "org.springframework.boot:spring-boot-autoconfigure"
+    implementation "org.grails:grails-core"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-tomcat"
+    implementation "org.grails:grails-web-boot"
+    implementation "org.grails:grails-plugin-rest"
+    implementation "org.grails.plugins:cache"
+    implementation "org.grails.plugins:scaffolding"
+    implementation "org.grails.plugins:hibernate5"
+    implementation "org.hibernate:hibernate-core:5.6.15.Final"
+    console "org.grails:grails-console"
+    runtimeOnly "com.h2database:h2"
+    runtimeOnly "org.mariadb.jdbc:mariadb-java-client:3.3.3"
+    runtimeOnly "org.apache.tomcat:tomcat-jdbc"
+    runtimeOnly "org.glassfish.web:jakarta.servlet.jsp.jstl"
+    testImplementation "org.grails:grails-gorm-testing-support"
+    testImplementation "org.grails:grails-web-testing-support"
+}
+
+bootRun {
+    jvmArgs(
+        "-Dspring.output.ansi.enabled=always",
+        "-noverify",
+        "-XX:TieredStopAtLevel=1"
+    )
+    sourceResources sourceSets.main
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}
+
+wrapper {
+    gradleVersion = "7.6.4"
+    distributionType = Wrapper.DistributionType.BIN
+}
