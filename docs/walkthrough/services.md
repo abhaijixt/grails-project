@@ -268,6 +268,7 @@ class BookService {
             publicationDate: book.publicationDate,
             description    : book.description,
             coverImageUrl  : book.coverImageUrl,
+            publisher      : book.publisher,
             categoryId     : book.category?.id,       // ?. safe navigation — null if no category
             categoryName   : book.category?.name,
             authors        : (book.authors ?: []).collect {
