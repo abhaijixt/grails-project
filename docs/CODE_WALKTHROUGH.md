@@ -353,6 +353,7 @@ class Book {
     Date publicationDate
     String description
     String coverImageUrl
+    String publisher
     Date dateCreated
     Date lastUpdated
 
@@ -385,6 +386,7 @@ class Book {
         publicationDate nullable: true
         description    nullable: true, maxSize: 2000
         coverImageUrl  nullable: true, maxSize: 500
+        publisher      nullable: true, maxSize: 200
         category       nullable: false
     }
 }
@@ -733,6 +735,7 @@ class BookService {
             publicationDate: book.publicationDate,
             description    : book.description,
             coverImageUrl  : book.coverImageUrl,
+            publisher      : book.publisher,
             categoryId     : book.category?.id,       // ?. safe navigation — null if no category
             categoryName   : book.category?.name,
             authors        : (book.authors ?: []).collect {

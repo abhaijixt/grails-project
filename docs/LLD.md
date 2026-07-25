@@ -18,6 +18,7 @@
 | `publicationDate` | `Date` | Yes | — |
 | `description` | `String` | Yes | max 2000 chars; mapped as SQL TEXT column |
 | `coverImageUrl` | `String` | Yes | max 500 characters |
+| `publisher` | `String` | Yes | max 200 characters |
 | `dateCreated` | `Date` | — | Auto-managed by GORM on insert |
 | `lastUpdated` | `Date` | — | Auto-managed by GORM on update |
 
@@ -372,7 +373,7 @@ erDiagram
 | `update` | write | `Book update(Long id, Map payload)` | Returns null if not found; skips author rebuild if `authorIds` key absent from payload |
 | `delete` | write | `void delete(Long id)` | Blocks if `OrderItem.countByBook(book) > 0`; throws `IllegalArgumentException` |
 | `lowStock` | read-only | `List<Map> lowStock(Integer threshold)` | `Book.findAllByStockQuantityLessThanEquals(threshold)` |
-| `toDto` | — | `Map toDto(Book book)` | Returns flat Map: id, title, isbn, price, stockQuantity, publicationDate, description, coverImageUrl, categoryId, categoryName, authors[], createdAt |
+| `toDto` | — | `Map toDto(Book book)` | Returns flat Map: id, title, isbn, price, stockQuantity, publicationDate, description, coverImageUrl, publisher, categoryId, categoryName, authors[], createdAt |
 
 ---
 
@@ -453,7 +454,8 @@ JSON error(String error, String message = "Error")
   "authorIds": [1, 2],
   "description": "A handbook of agile software craftsmanship",
   "publicationDate": "2008-08-11",
-  "coverImageUrl": "https://example.com/clean-code.jpg"
+  "coverImageUrl": "https://example.com/clean-code.jpg",
+  "publisher": "Prentice Hall"
 }
 ```
 
