@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grails Bookstore — Documentation</title>
+  <meta name="description" content="Documentation for the Grails Bookstore REST API — architecture, domain model, endpoints, order lifecycle and conventions." />
+
+  <!-- Fonts: Funnel Sans (display/body) + Fragment Mono (code).
+       CDN-loaded; page falls back to system sans-serif offline. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Funnel+Sans:wght@300..800&family=Fragment+Mono&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- React 18.3.1 UMD, vendored locally — no CDN dependency at runtime.
+       app.compiled.js is generated from app.js (the JSX source):
+         node -e "const B=require('./babel.min.js'),f=require('fs');
+                  f.writeFileSync('app.compiled.js',
+                    B.transform(f.readFileSync('app.js','utf8'),{presets:['react']}).code)" -->
+  <script src="vendor/react.production.min.js"></script>
+  <script src="vendor/react-dom.production.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="app.compiled.js"></script>
+</body>
+</html>

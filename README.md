@@ -33,4 +33,49 @@ cd grails-bookstore
 ./gradlew bootRun
 ```
 
+## Documentation
+
+Design documentation lives in `docs/` and is published as a MkDocs site using the
+Material theme. The Markdown files are readable as-is on GitHub; the MkDocs site
+adds search, syntax highlighting, and rendered Mermaid diagrams.
+
+| Document | Covers |
+|---|---|
+| `docs/HLD.md` | High-level design — stack, architecture, API surface, business rules |
+| `docs/LLD.md` | Low-level design — domain specs, schema, method and action specs, response shapes |
+| `docs/walkthrough/` | Code walkthrough — file-by-file, split by layer (config, domain, services, controllers) |
+
+### Serving the docs locally
+
+Requires Python 3.9+. Install the pinned toolchain into a virtualenv:
+
+```bash
+python3 -m venv .venv-docs
+source .venv-docs/bin/activate
+pip install -r requirements-docs.txt
+```
+
+Then start the live-reloading dev server from the repository root:
+
+```bash
+mkdocs serve
+```
+
+Open <http://127.0.0.1:8000/>. Edits to anything under `docs/` reload the browser
+automatically.
+
+To produce the static site (output goes to `site/`, which is git-ignored):
+
+```bash
+mkdocs build --strict
+```
+
+`--strict` turns broken links, bad anchors, and pages missing from the nav into
+build failures — worth keeping on in CI.
+
+> **Note:** Mermaid diagrams are rendered client-side by a script the Material
+> theme loads from a CDN, so they need network access on first view. The ASCII
+> versions of the same diagrams are kept in the documents alongside them and
+> render offline.
+
 # grails-project
