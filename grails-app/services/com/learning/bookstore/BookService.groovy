@@ -120,6 +120,7 @@ class BookService {
             publicationDate: book.publicationDate,
             description: book.description,
             coverImageUrl: book.coverImageUrl,
+            publisher: book.publisher,
             categoryId: book.category?.id,
             categoryName: book.category?.name,
             authors: (book.authors ?: []).collect { [id: it.id, fullName: it.fullName, email: it.email] },
