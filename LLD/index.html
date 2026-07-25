@@ -1,0 +1,2702 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="High-level design, low-level design, and a file-by-file code walkthrough for the Grails 6 bookstore REST API.">
+      
+      
+      
+        <link rel="canonical" href="https://abhaijixt.github.io/grails-project/LLD/">
+      
+      
+        <link rel="prev" href="../HLD/">
+      
+      
+        <link rel="next" href="../walkthrough/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Low-Level Design - Grails Bookstore — Design Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#low-level-design-grails-bookstore" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Grails Bookstore — Design Docs" class="md-header__button md-logo" aria-label="Grails Bookstore — Design Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Grails Bookstore — Design Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Low-Level Design
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/abhaijixt/grails-project" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    abhaijixt/grails-project
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Grails Bookstore — Design Docs" class="md-nav__button md-logo" aria-label="Grails Bookstore — Design Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Grails Bookstore — Design Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/abhaijixt/grails-project" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    abhaijixt/grails-project
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HLD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    High-Level Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Low-Level Design
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Low-Level Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-domain-class-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Domain Class Specifications
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Domain Class Specifications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-book" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Book
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-author" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Author
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Category
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-customer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Customer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-bookorder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 BookOrder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-orderitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 OrderItem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-orderstatus-state-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 OrderStatus — State Machine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-customerstatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 CustomerStatus
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-database-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Database Schema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Database Schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generated-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generated Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-service-layer-method-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Service Layer — Method Specifications
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Service Layer — Method Specifications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-bookservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 BookService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-orderservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 OrderService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-authorservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 AuthorService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-apiresponseservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 ApiResponseService
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-controller-layer-action-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Controller Layer — Action Specifications
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Controller Layer — Action Specifications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-bookcontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 BookController
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-authorcontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 AuthorController
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-categorycontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 CategoryController
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-ordercontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 OrderController
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-url-routing-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. URL Routing Specification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-critical-flows-detailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Critical Flows — Detailed
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Critical Flows — Detailed">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-book-update-author-guard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Book Update — Author Guard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-order-cancellation-stock-restoration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Order Cancellation — Stock Restoration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-pessimistic-lock-on-stock-decrement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Pessimistic Lock on Stock Decrement
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-response-shapes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Response Shapes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Response Shapes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#success-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Success Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paginated-response-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paginated Response (lists)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-http-status-code-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. HTTP Status Code Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../walkthrough/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Walkthrough
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code Walkthrough
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../walkthrough/configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration & Build
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../walkthrough/domain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Domain Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../walkthrough/services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Service Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../walkthrough/controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../walkthrough/entry-point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entry Point & Key Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-domain-class-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Domain Class Specifications
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Domain Class Specifications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-book" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Book
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-author" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Author
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Category
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-customer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Customer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-bookorder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 BookOrder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-orderitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 OrderItem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-orderstatus-state-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 OrderStatus — State Machine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-customerstatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 CustomerStatus
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-database-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Database Schema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Database Schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generated-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generated Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-service-layer-method-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Service Layer — Method Specifications
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Service Layer — Method Specifications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-bookservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 BookService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-orderservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 OrderService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-authorservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 AuthorService
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-apiresponseservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 ApiResponseService
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-controller-layer-action-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Controller Layer — Action Specifications
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Controller Layer — Action Specifications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-bookcontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 BookController
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-authorcontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 AuthorController
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-categorycontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 CategoryController
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-ordercontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 OrderController
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-url-routing-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. URL Routing Specification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-critical-flows-detailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Critical Flows — Detailed
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Critical Flows — Detailed">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-book-update-author-guard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Book Update — Author Guard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-order-cancellation-stock-restoration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Order Cancellation — Stock Restoration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-pessimistic-lock-on-stock-decrement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Pessimistic Lock on Stock Decrement
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-response-shapes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Response Shapes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Response Shapes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#success-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Success Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paginated-response-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paginated Response (lists)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-http-status-code-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. HTTP Status Code Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="low-level-design-grails-bookstore">Low-Level Design — Grails Bookstore<a class="headerlink" href="#low-level-design-grails-bookstore" title="Permanent link">&para;</a></h1>
+<hr />
+<h2 id="1-domain-class-specifications">1. Domain Class Specifications<a class="headerlink" href="#1-domain-class-specifications" title="Permanent link">&para;</a></h2>
+<h3 id="11-book">1.1 <code>Book</code><a class="headerlink" href="#11-book" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>grails-app/domain/com/learning/bookstore/Book.groovy</code></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Constraints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>Long</code></td>
+<td>No</td>
+<td>Auto-generated by GORM</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>String</code></td>
+<td>No</td>
+<td>1–300 characters</td>
+</tr>
+<tr>
+<td><code>isbn</code></td>
+<td><code>String</code></td>
+<td>No</td>
+<td>Unique, max 20 characters</td>
+</tr>
+<tr>
+<td><code>price</code></td>
+<td><code>BigDecimal</code></td>
+<td>No</td>
+<td>0.01–9999.99</td>
+</tr>
+<tr>
+<td><code>stockQuantity</code></td>
+<td><code>Integer</code></td>
+<td>No</td>
+<td>min 0</td>
+</tr>
+<tr>
+<td><code>publicationDate</code></td>
+<td><code>Date</code></td>
+<td>Yes</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>String</code></td>
+<td>Yes</td>
+<td>max 2000 chars; mapped as SQL TEXT column</td>
+</tr>
+<tr>
+<td><code>coverImageUrl</code></td>
+<td><code>String</code></td>
+<td>Yes</td>
+<td>max 500 characters</td>
+</tr>
+<tr>
+<td><code>dateCreated</code></td>
+<td><code>Date</code></td>
+<td>—</td>
+<td>Auto-managed by GORM on insert</td>
+</tr>
+<tr>
+<td><code>lastUpdated</code></td>
+<td><code>Date</code></td>
+<td>—</td>
+<td>Auto-managed by GORM on update</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Relationships:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Book  --belongsTo--&gt;  Category     (many books to one category; FK: category_id)
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Book  --hasMany--&gt;    Author       (join table: book_author)
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Book  --hasMany--&gt;    OrderItem    (one book can appear in many order items)
+</span></code></pre></div>
+<p><strong>GORM mapping note:</strong> <code>description</code> is mapped with <code>type: "text"</code> so MariaDB stores it as a <code>TEXT</code> column rather than <code>VARCHAR</code>.</p>
+<hr />
+<h3 id="12-author">1.2 <code>Author</code><a class="headerlink" href="#12-author" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>grails-app/domain/com/learning/bookstore/Author.groovy</code></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Constraints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>Long</code></td>
+<td>No</td>
+<td>Auto-generated</td>
+</tr>
+<tr>
+<td><code>firstName</code></td>
+<td><code>String</code></td>
+<td>No</td>
+<td>max 100</td>
+</tr>
+<tr>
+<td><code>lastName</code></td>
+<td><code>String</code></td>
+<td>No</td>
+<td>max 100</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td><code>String</code></td>
+<td>No</td>
+<td>Unique, email format validated</td>
+</tr>
+<tr>
+<td><code>birthDate</code></td>
+<td><code>Date</code></td>
+<td>Yes</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>bio</code></td>
+<td><code>String</code></td>
+<td>Yes</td>
+<td>max 1000 characters</td>
+</tr>
+<tr>
+<td><code>dateCreated</code></td>
+<td><code>Date</code></td>
+<td>—</td>
+<td>Auto-managed</td>
+</tr>
+<tr>
+<td><code>lastUpdated</code></td>
+<td><code>Date</code></td>
+<td>—</td>
+<td>Auto-managed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Computed property:</strong></p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">String</span><span class="w"> </span><span class="nf">getFullName</span><span class="o">()</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="s2">&quot;${firstName} ${lastName}&quot;</span><span class="w"> </span><span class="o">}</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1">// Called as author.fullName anywhere in the codebase</span>
+</span></code></pre></div>
+<p><strong>Relationship:</strong> <code>hasMany = [books: Book]</code> — the join table is owned by the <code>Book</code> side.</p>
+<hr />
+<h3 id="13-category">1.3 <code>Category</code><a class="headerlink" href="#13-category" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>grails-app/domain/com/learning/bookstore/Category.groovy</code></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Constraints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>Long</code></td>
+<td>No</td>
+<td>Auto-generated</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>No</td>
+<td>Unique, 2–100 characters</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>String</code></td>
+<td>Yes</td>
+<td>max 500 characters</td>
+</tr>
+<tr>
+<td><code>dateCreated</code></td>
+<td><code>Date</code></td>
+<td>—</td>
+<td>Auto-managed</td>
+</tr>
+<tr>
+<td><code>lastUpdated</code></td>
+<td><code>Date</code></td>
+<td>—</td>
+<td>Auto-managed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Relationship:</strong> <code>hasMany = [books: Book]</code></p>
+<p><strong>Deletion guard (CategoryController):</strong> The controller calls <code>Book.countByCategory(category)</code> before deleting. If the count is &gt; 0, the delete is rejected with HTTP 400.</p>
+<hr />
+<h3 id="14-customer">1.4 <code>Customer</code><a class="headerlink" href="#14-customer" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>grails-app/domain/com/learning/bookstore/Customer.groovy</code></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Constraints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>Long</code></td>
+<td>No</td>
+<td>Auto-generated</td>
+</tr>
+<tr>
+<td><code>firstName</code></td>
+<td><code>String</code></td>
+<td>No</td>
+<td>max 100</td>
+</tr>
+<tr>
+<td><code>lastName</code></td>
+<td><code>String</code></td>
+<td>No</td>
+<td>max 100</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td><code>String</code></td>
+<td>No</td>
+<td>Unique, email format</td>
+</tr>
+<tr>
+<td><code>phone</code></td>
+<td><code>String</code></td>
+<td>Yes</td>
+<td>Regex <code>/^\+?[0-9]{10,15}$/</code></td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td><code>String</code></td>
+<td>Yes</td>
+<td>max 500</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>CustomerStatus</code></td>
+<td>No</td>
+<td>Default: <code>ACTIVE</code></td>
+</tr>
+<tr>
+<td><code>dateCreated</code></td>
+<td><code>Date</code></td>
+<td>—</td>
+<td>Auto-managed</td>
+</tr>
+<tr>
+<td><code>lastUpdated</code></td>
+<td><code>Date</code></td>
+<td>—</td>
+<td>Auto-managed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Computed property:</strong> <code>getFullName()</code> → <code>"${firstName} ${lastName}"</code></p>
+<p><strong>Relationship:</strong> <code>hasMany = [orders: BookOrder]</code></p>
+<hr />
+<h3 id="15-bookorder">1.5 <code>BookOrder</code><a class="headerlink" href="#15-bookorder" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>grails-app/domain/com/learning/bookstore/BookOrder.groovy</code></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Constraints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>Long</code></td>
+<td>No</td>
+<td>Auto-generated</td>
+</tr>
+<tr>
+<td><code>customer</code></td>
+<td><code>Customer</code></td>
+<td>No</td>
+<td>FK: customer_id</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>OrderStatus</code></td>
+<td>No</td>
+<td>Default: <code>PENDING</code></td>
+</tr>
+<tr>
+<td><code>totalAmount</code></td>
+<td><code>BigDecimal</code></td>
+<td>No</td>
+<td>min 0; default 0</td>
+</tr>
+<tr>
+<td><code>shippingAddress</code></td>
+<td><code>String</code></td>
+<td>Yes</td>
+<td>max 500</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td><code>String</code></td>
+<td>Yes</td>
+<td>max 1000</td>
+</tr>
+<tr>
+<td><code>shippedAt</code></td>
+<td><code>Date</code></td>
+<td>Yes</td>
+<td>Set when status → SHIPPED</td>
+</tr>
+<tr>
+<td><code>deliveredAt</code></td>
+<td><code>Date</code></td>
+<td>Yes</td>
+<td>Set when status → DELIVERED</td>
+</tr>
+<tr>
+<td><code>dateCreated</code></td>
+<td><code>Date</code></td>
+<td>—</td>
+<td>Auto-managed</td>
+</tr>
+<tr>
+<td><code>lastUpdated</code></td>
+<td><code>Date</code></td>
+<td>—</td>
+<td>Auto-managed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Relationships:</strong>
+- <code>belongsTo = [customer: Customer]</code> — cascade delete if customer is deleted
+- <code>hasMany = [orderItems: OrderItem]</code></p>
+<p><strong>Method:</strong></p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">recalculateTotal</span><span class="o">()</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="n">totalAmount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">orderItems</span><span class="o">?.</span><span class="na">collect</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">it</span><span class="o">.</span><span class="na">subtotal</span><span class="w"> </span><span class="o">}?.</span><span class="na">sum</span><span class="o">()</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="n">BigDecimal</span><span class="o">.</span><span class="na">ZERO</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="o">}</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1">// Called after all OrderItems are added during order placement</span>
+</span></code></pre></div>
+<hr />
+<h3 id="16-orderitem">1.6 <code>OrderItem</code><a class="headerlink" href="#16-orderitem" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>grails-app/domain/com/learning/bookstore/OrderItem.groovy</code></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Nullable</th>
+<th>Constraints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>Long</code></td>
+<td>No</td>
+<td>Auto-generated</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td><code>BookOrder</code></td>
+<td>No</td>
+<td>FK: order_id</td>
+</tr>
+<tr>
+<td><code>book</code></td>
+<td><code>Book</code></td>
+<td>No</td>
+<td>FK: book_id</td>
+</tr>
+<tr>
+<td><code>quantity</code></td>
+<td><code>Integer</code></td>
+<td>No</td>
+<td>min 1</td>
+</tr>
+<tr>
+<td><code>priceAtPurchase</code></td>
+<td><code>BigDecimal</code></td>
+<td>No</td>
+<td>min 0 (snapshot of Book.price at order time)</td>
+</tr>
+<tr>
+<td><code>dateCreated</code></td>
+<td><code>Date</code></td>
+<td>—</td>
+<td>Auto-managed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Computed property:</strong></p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">BigDecimal</span><span class="w"> </span><span class="nf">getSubtotal</span><span class="o">()</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="o">(</span><span class="n">priceAtPurchase</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="n">BigDecimal</span><span class="o">.</span><span class="na">ZERO</span><span class="o">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">(</span><span class="n">quantity</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="mi">0</span><span class="o">)</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="o">}</span>
+</span></code></pre></div>
+<p><strong>Relationship:</strong> <code>belongsTo = [order: BookOrder]</code></p>
+<hr />
+<h3 id="17-orderstatus-state-machine">1.7 <code>OrderStatus</code> — State Machine<a class="headerlink" href="#17-orderstatus-state-machine" title="Permanent link">&para;</a></h3>
+<p><strong>File:</strong> <code>grails-app/domain/com/learning/bookstore/OrderStatus.groovy</code></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PENDING ──► CONFIRMED ──► PROCESSING ──► SHIPPED ──► DELIVERED ──► REFUNDED
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>   │              │
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>   └──────────────┴──► CANCELLED
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Rendered equivalent</p>
+<p>The same state machine as a Mermaid state diagram. The ASCII sketch above is the original; this is a rendered version of it. <code>CANCELLED</code> and <code>REFUNDED</code> are terminal.</p>
+</div>
+<pre class="mermaid"><code>stateDiagram-v2
+    [*] --&gt; PENDING
+    PENDING --&gt; CONFIRMED
+    PENDING --&gt; CANCELLED
+    CONFIRMED --&gt; PROCESSING
+    CONFIRMED --&gt; CANCELLED
+    PROCESSING --&gt; SHIPPED
+    SHIPPED --&gt; DELIVERED
+    DELIVERED --&gt; REFUNDED
+    CANCELLED --&gt; [*]
+    REFUNDED --&gt; [*]</code></pre>
+<p><strong>Valid transitions defined by <code>canTransitionTo(OrderStatus target)</code>:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Current State</th>
+<th>Allowed Next States</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PENDING</code></td>
+<td><code>CONFIRMED</code>, <code>CANCELLED</code></td>
+</tr>
+<tr>
+<td><code>CONFIRMED</code></td>
+<td><code>PROCESSING</code>, <code>CANCELLED</code></td>
+</tr>
+<tr>
+<td><code>PROCESSING</code></td>
+<td><code>SHIPPED</code></td>
+</tr>
+<tr>
+<td><code>SHIPPED</code></td>
+<td><code>DELIVERED</code></td>
+</tr>
+<tr>
+<td><code>DELIVERED</code></td>
+<td><code>REFUNDED</code></td>
+</tr>
+<tr>
+<td><code>CANCELLED</code></td>
+<td><em>(none — terminal state)</em></td>
+</tr>
+<tr>
+<td><code>REFUNDED</code></td>
+<td><em>(none — terminal state)</em></td>
+</tr>
+</tbody>
+</table>
+<p>Any other transition throws <code>IllegalArgumentException("Invalid status transition: X -&gt; Y")</code>.</p>
+<p><strong>Side effects enforced by <code>OrderService.updateStatus()</code>:</strong>
+- Transition to <code>SHIPPED</code> → sets <code>order.shippedAt = new Date()</code>
+- Transition to <code>DELIVERED</code> → sets <code>order.deliveredAt = new Date()</code></p>
+<hr />
+<h3 id="18-customerstatus">1.8 <code>CustomerStatus</code><a class="headerlink" href="#18-customerstatus" title="Permanent link">&para;</a></h3>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kd">enum</span><span class="w"> </span><span class="n">CustomerStatus</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">ACTIVE</span><span class="o">,</span><span class="w"> </span><span class="n">INACTIVE</span><span class="o">,</span><span class="w"> </span><span class="n">SUSPENDED</span><span class="w"> </span><span class="o">}</span>
+</span></code></pre></div>
+<p>Only <code>ACTIVE</code> customers can place orders. Checked in <code>OrderService.place()</code>.</p>
+<hr />
+<h2 id="2-database-schema">2. Database Schema<a class="headerlink" href="#2-database-schema" title="Permanent link">&para;</a></h2>
+<h3 id="generated-tables">Generated Tables<a class="headerlink" href="#generated-tables" title="Permanent link">&para;</a></h3>
+<p>GORM's <code>dbCreate: update</code> generates and maintains this schema automatically.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>┌───────────────────┐        ┌──────────────────────┐
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>│     category      │        │        author         │
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>├───────────────────┤        ├──────────────────────┤
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>│ id (PK)           │        │ id (PK)               │
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>│ name (UNIQUE)     │        │ first_name            │
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>│ description       │        │ last_name             │
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>│ date_created      │        │ email (UNIQUE)        │
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>│ last_updated      │        │ birth_date            │
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>└────────┬──────────┘        │ bio                  │
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>         │                   │ date_created          │
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>         │ FK                │ last_updated          │
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>         ▼                   └──────────┬────────────┘
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>┌────────────────────────┐              │ M:M join
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>│         book           │◄─────────────┤
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>├────────────────────────┤    ┌─────────▼──────────┐
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>│ id (PK)                │    │     book_author     │
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>│ title                  │    ├────────────────────┤
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>│ isbn (UNIQUE)          │    │ book_id (FK)        │
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>│ price (DECIMAL 10,2)   │    │ author_id (FK)      │
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>│ stock_quantity         │    └────────────────────┘
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>│ publication_date       │
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>│ description (TEXT)     │
+</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>│ cover_image_url        │
+</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>│ category_id (FK)       │
+</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>│ date_created           │
+</span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>│ last_updated           │
+</span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>└──────────┬─────────────┘
+</span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>           │
+</span><span id="__span-6-29"><a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>           │ via order_item.book_id
+</span><span id="__span-6-30"><a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>           ▼
+</span><span id="__span-6-31"><a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>┌───────────────────────┐      ┌─────────────────────┐
+</span><span id="__span-6-32"><a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>│      order_item       │      │      customer        │
+</span><span id="__span-6-33"><a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>├───────────────────────┤      ├─────────────────────┤
+</span><span id="__span-6-34"><a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>│ id (PK)               │      │ id (PK)              │
+</span><span id="__span-6-35"><a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>│ order_id (FK)         │      │ first_name           │
+</span><span id="__span-6-36"><a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>│ book_id (FK)          │      │ last_name            │
+</span><span id="__span-6-37"><a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>│ quantity              │      │ email (UNIQUE)       │
+</span><span id="__span-6-38"><a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a>│ price_at_purchase     │      │ phone                │
+</span><span id="__span-6-39"><a id="__codelineno-6-39" name="__codelineno-6-39" href="#__codelineno-6-39"></a>│ date_created          │      │ address              │
+</span><span id="__span-6-40"><a id="__codelineno-6-40" name="__codelineno-6-40" href="#__codelineno-6-40"></a>└───────────┬───────────┘      │ status (ENUM)        │
+</span><span id="__span-6-41"><a id="__codelineno-6-41" name="__codelineno-6-41" href="#__codelineno-6-41"></a>            │ FK               │ date_created         │
+</span><span id="__span-6-42"><a id="__codelineno-6-42" name="__codelineno-6-42" href="#__codelineno-6-42"></a>            ▼                  │ last_updated         │
+</span><span id="__span-6-43"><a id="__codelineno-6-43" name="__codelineno-6-43" href="#__codelineno-6-43"></a>┌───────────────────────┐      └──────────┬──────────┘
+</span><span id="__span-6-44"><a id="__codelineno-6-44" name="__codelineno-6-44" href="#__codelineno-6-44"></a>│      book_order       │                 │
+</span><span id="__span-6-45"><a id="__codelineno-6-45" name="__codelineno-6-45" href="#__codelineno-6-45"></a>├───────────────────────┤◄────────────────┘ FK
+</span><span id="__span-6-46"><a id="__codelineno-6-46" name="__codelineno-6-46" href="#__codelineno-6-46"></a>│ id (PK)               │
+</span><span id="__span-6-47"><a id="__codelineno-6-47" name="__codelineno-6-47" href="#__codelineno-6-47"></a>│ customer_id (FK)      │
+</span><span id="__span-6-48"><a id="__codelineno-6-48" name="__codelineno-6-48" href="#__codelineno-6-48"></a>│ status (ENUM)         │
+</span><span id="__span-6-49"><a id="__codelineno-6-49" name="__codelineno-6-49" href="#__codelineno-6-49"></a>│ total_amount          │
+</span><span id="__span-6-50"><a id="__codelineno-6-50" name="__codelineno-6-50" href="#__codelineno-6-50"></a>│ shipping_address      │
+</span><span id="__span-6-51"><a id="__codelineno-6-51" name="__codelineno-6-51" href="#__codelineno-6-51"></a>│ notes                 │
+</span><span id="__span-6-52"><a id="__codelineno-6-52" name="__codelineno-6-52" href="#__codelineno-6-52"></a>│ shipped_at            │
+</span><span id="__span-6-53"><a id="__codelineno-6-53" name="__codelineno-6-53" href="#__codelineno-6-53"></a>│ delivered_at          │
+</span><span id="__span-6-54"><a id="__codelineno-6-54" name="__codelineno-6-54" href="#__codelineno-6-54"></a>│ date_created          │
+</span><span id="__span-6-55"><a id="__codelineno-6-55" name="__codelineno-6-55" href="#__codelineno-6-55"></a>│ last_updated          │
+</span><span id="__span-6-56"><a id="__codelineno-6-56" name="__codelineno-6-56" href="#__codelineno-6-56"></a>└───────────────────────┘
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Rendered equivalent</p>
+<p>The same generated schema as a Mermaid ER diagram. The ASCII table sketch above is the original; this is a rendered version of it, with the <code>book_author</code> join table expressed as a many-to-many relationship.</p>
+</div>
+<pre class="mermaid"><code>erDiagram
+    category {
+        bigint id PK
+        varchar name UK
+        varchar description
+        datetime date_created
+        datetime last_updated
+    }
+    author {
+        bigint id PK
+        varchar first_name
+        varchar last_name
+        varchar email UK
+        date birth_date
+        text bio
+        datetime date_created
+        datetime last_updated
+    }
+    book {
+        bigint id PK
+        varchar title
+        varchar isbn UK
+        decimal price
+        int stock_quantity
+        date publication_date
+        text description
+        varchar cover_image_url
+        bigint category_id FK
+        datetime date_created
+        datetime last_updated
+    }
+    customer {
+        bigint id PK
+        varchar first_name
+        varchar last_name
+        varchar email UK
+        varchar phone
+        varchar address
+        varchar status
+        datetime date_created
+        datetime last_updated
+    }
+    book_order {
+        bigint id PK
+        bigint customer_id FK
+        varchar status
+        decimal total_amount
+        varchar shipping_address
+        varchar notes
+        datetime shipped_at
+        datetime delivered_at
+        datetime date_created
+        datetime last_updated
+    }
+    order_item {
+        bigint id PK
+        bigint order_id FK
+        bigint book_id FK
+        int quantity
+        decimal price_at_purchase
+        datetime date_created
+    }
+
+    category   ||--o{ book       : "category_id"
+    author     }o--o{ book       : "book_author join"
+    customer   ||--o{ book_order : "customer_id"
+    book_order ||--o{ order_item : "order_id"
+    book       ||--o{ order_item : "book_id"</code></pre>
+<hr />
+<h2 id="3-service-layer-method-specifications">3. Service Layer — Method Specifications<a class="headerlink" href="#3-service-layer-method-specifications" title="Permanent link">&para;</a></h2>
+<h3 id="31-bookservice">3.1 <code>BookService</code><a class="headerlink" href="#31-bookservice" title="Permanent link">&para;</a></h3>
+<p><strong>Class annotation:</strong> <code>@Transactional(readOnly = true)</code> — all methods are read-only by default; write methods override with <code>@Transactional</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Transaction</th>
+<th>Signature</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list</code></td>
+<td>read-only</td>
+<td><code>Map list(Map params)</code></td>
+<td>Paginated list; size capped at 100; returns <code>{content, totalElements, page, size}</code></td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td>read-only</td>
+<td><code>Map search(Map params)</code></td>
+<td>Criteria query; filters: title (ilike), categoryId (eq), minPrice (ge), maxPrice (le), inStock (gt 0)</td>
+</tr>
+<tr>
+<td><code>getById</code></td>
+<td>read-only</td>
+<td><code>Book getById(Long id)</code></td>
+<td><code>Book.get(id)</code> — returns null if not found</td>
+</tr>
+<tr>
+<td><code>findByIsbn</code></td>
+<td>read-only</td>
+<td><code>Book findByIsbn(String isbn)</code></td>
+<td>GORM dynamic finder</td>
+</tr>
+<tr>
+<td><code>create</code></td>
+<td>write</td>
+<td><code>Book create(Map payload)</code></td>
+<td>Validates ISBN uniqueness, resolves category and authors, saves</td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td>write</td>
+<td><code>Book update(Long id, Map payload)</code></td>
+<td>Returns null if not found; skips author rebuild if <code>authorIds</code> key absent from payload</td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td>write</td>
+<td><code>void delete(Long id)</code></td>
+<td>Blocks if <code>OrderItem.countByBook(book) &gt; 0</code>; throws <code>IllegalArgumentException</code></td>
+</tr>
+<tr>
+<td><code>lowStock</code></td>
+<td>read-only</td>
+<td><code>List&lt;Map&gt; lowStock(Integer threshold)</code></td>
+<td><code>Book.findAllByStockQuantityLessThanEquals(threshold)</code></td>
+</tr>
+<tr>
+<td><code>toDto</code></td>
+<td>—</td>
+<td><code>Map toDto(Book book)</code></td>
+<td>Returns flat Map: id, title, isbn, price, stockQuantity, publicationDate, description, coverImageUrl, categoryId, categoryName, authors[], createdAt</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="32-orderservice">3.2 <code>OrderService</code><a class="headerlink" href="#32-orderservice" title="Permanent link">&para;</a></h3>
+<p><strong>Class annotation:</strong> <code>@Transactional(readOnly = true)</code></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Transaction</th>
+<th>Signature</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>place</code></td>
+<td>write</td>
+<td><code>BookOrder place(Map payload)</code></td>
+<td>Validates customer active; for each item: <code>Book.lock(id)</code> (pessimistic), checks stock, decrements, creates <code>OrderItem</code>; recalculates total</td>
+</tr>
+<tr>
+<td><code>getById</code></td>
+<td>read-only</td>
+<td><code>BookOrder getById(Long id)</code></td>
+<td><code>BookOrder.get(id)</code></td>
+</tr>
+<tr>
+<td><code>customerOrders</code></td>
+<td>read-only</td>
+<td><code>Map customerOrders(Long customerId, Integer page, Integer size)</code></td>
+<td>Paginated, sorted by <code>dateCreated DESC</code></td>
+</tr>
+<tr>
+<td><code>byStatus</code></td>
+<td>read-only</td>
+<td><code>Map byStatus(OrderStatus status, Integer page, Integer size)</code></td>
+<td>Paginated, capped at 100, sorted <code>dateCreated DESC</code></td>
+</tr>
+<tr>
+<td><code>updateStatus</code></td>
+<td>write</td>
+<td><code>BookOrder updateStatus(Long id, OrderStatus newStatus)</code></td>
+<td>Validates transition via enum; sets <code>shippedAt</code>/<code>deliveredAt</code> as appropriate</td>
+</tr>
+<tr>
+<td><code>cancel</code></td>
+<td>write</td>
+<td><code>void cancel(Long id, String reason)</code></td>
+<td>Throws if not found; validates CANCELLED transition; restores stock for each item; appends reason to notes</td>
+</tr>
+<tr>
+<td><code>toDto</code></td>
+<td>—</td>
+<td><code>Map toDto(BookOrder order)</code></td>
+<td>Returns flat Map including nested items[] array</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="33-authorservice">3.3 <code>AuthorService</code><a class="headerlink" href="#33-authorservice" title="Permanent link">&para;</a></h3>
+<p><strong>Class annotation:</strong> <code>@Transactional(readOnly = true)</code></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Transaction</th>
+<th>Signature</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list</code></td>
+<td>read-only</td>
+<td><code>List&lt;Map&gt; list()</code></td>
+<td>All authors sorted by lastName asc</td>
+</tr>
+<tr>
+<td><code>getById</code></td>
+<td>read-only</td>
+<td><code>Author getById(Long id)</code></td>
+<td><code>Author.get(id)</code></td>
+</tr>
+<tr>
+<td><code>create</code></td>
+<td>write</td>
+<td><code>Author create(Map payload)</code></td>
+<td>Checks email uniqueness; validates; saves</td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td>write</td>
+<td><code>Author update(Long id, Map payload)</code></td>
+<td>Returns null if not found; email uniqueness check excludes self</td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td>write</td>
+<td><code>void delete(Long id)</code></td>
+<td>Deletes if exists</td>
+</tr>
+<tr>
+<td><code>toDto</code></td>
+<td>—</td>
+<td><code>Map toDto(Author author)</code></td>
+<td>id, fullName, firstName, lastName, email, birthDate, bio, createdAt</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="34-apiresponseservice">3.4 <code>ApiResponseService</code><a class="headerlink" href="#34-apiresponseservice" title="Permanent link">&para;</a></h3>
+<p>Stateless helper — not <code>@Transactional</code>.</p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">JSON</span><span class="w"> </span><span class="nf">success</span><span class="o">(</span><span class="n">Object</span><span class="w"> </span><span class="n">data</span><span class="o">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Success&quot;</span><span class="o">)</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1">// Returns: { success: true, message, data, timestamp }</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">JSON</span><span class="w"> </span><span class="nf">error</span><span class="o">(</span><span class="n">String</span><span class="w"> </span><span class="n">error</span><span class="o">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Error&quot;</span><span class="o">)</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1">// Returns: { success: false, message, error, timestamp }</span>
+</span></code></pre></div>
+<hr />
+<h2 id="4-controller-layer-action-specifications">4. Controller Layer — Action Specifications<a class="headerlink" href="#4-controller-layer-action-specifications" title="Permanent link">&para;</a></h2>
+<h3 id="41-bookcontroller">4.1 <code>BookController</code><a class="headerlink" href="#41-bookcontroller" title="Permanent link">&para;</a></h3>
+<p><code>static responseFormats = ['json']</code></p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>HTTP</th>
+<th>Route</th>
+<th>Success</th>
+<th>Error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>index</code></td>
+<td>GET</td>
+<td><code>/api/v1/books</code></td>
+<td>200 + paginated list</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td>GET</td>
+<td><code>/api/v1/books/search</code></td>
+<td>200 + filtered list</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>show</code></td>
+<td>GET</td>
+<td><code>/api/v1/books/{id}</code></td>
+<td>200 + book</td>
+<td>404</td>
+</tr>
+<tr>
+<td><code>findByIsbn</code></td>
+<td>GET</td>
+<td><code>/api/v1/books/isbn/{isbn}</code></td>
+<td>200 + book</td>
+<td>404</td>
+</tr>
+<tr>
+<td><code>save</code></td>
+<td>POST</td>
+<td><code>/api/v1/books</code></td>
+<td>201 + book</td>
+<td>400</td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td>PUT</td>
+<td><code>/api/v1/books/{id}</code></td>
+<td>200 + book</td>
+<td>404, 400</td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td>DELETE</td>
+<td><code>/api/v1/books/{id}</code></td>
+<td>204</td>
+<td>400</td>
+</tr>
+<tr>
+<td><code>lowStock</code></td>
+<td>GET</td>
+<td><code>/api/v1/books/low-stock</code></td>
+<td>200 + list</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Query parameters for <code>index</code>:</strong> <code>page</code> (int, default 0), <code>size</code> (int, default 10, max 100), <code>sortBy</code> (string, default "title"), <code>sortDir</code> (string, default "asc")</p>
+<p><strong>Query parameters for <code>search</code>:</strong> <code>title</code>, <code>categoryId</code>, <code>minPrice</code>, <code>maxPrice</code>, <code>inStock</code> (boolean string "true"), <code>page</code>, <code>size</code></p>
+<p><strong>Request body for <code>save</code>/<code>update</code>:</strong>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Clean Code&quot;</span><span class="p">,</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">&quot;isbn&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;978-0-13-235088-4&quot;</span><span class="p">,</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">39.99</span><span class="p">,</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">&quot;stockQuantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="nt">&quot;categoryId&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="nt">&quot;authorIds&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A handbook of agile software craftsmanship&quot;</span><span class="p">,</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">  </span><span class="nt">&quot;publicationDate&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2008-08-11&quot;</span><span class="p">,</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">  </span><span class="nt">&quot;coverImageUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://example.com/clean-code.jpg&quot;</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<hr />
+<h3 id="42-authorcontroller">4.2 <code>AuthorController</code><a class="headerlink" href="#42-authorcontroller" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>HTTP</th>
+<th>Route</th>
+<th>Success</th>
+<th>Error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>index</code></td>
+<td>GET</td>
+<td><code>/api/v1/authors</code></td>
+<td>200 + list</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>show</code></td>
+<td>GET</td>
+<td><code>/api/v1/authors/{id}</code></td>
+<td>200 + author</td>
+<td>404</td>
+</tr>
+<tr>
+<td><code>save</code></td>
+<td>POST</td>
+<td><code>/api/v1/authors</code></td>
+<td>201 + author</td>
+<td>400</td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td>PUT</td>
+<td><code>/api/v1/authors/{id}</code></td>
+<td>200 + author</td>
+<td>404, 400</td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td>DELETE</td>
+<td><code>/api/v1/authors/{id}</code></td>
+<td>204</td>
+<td>404</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Request body for <code>save</code>/<code>update</code>:</strong>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">&quot;firstName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Robert&quot;</span><span class="p">,</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">&quot;lastName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Martin&quot;</span><span class="p">,</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uncle.bob@example.com&quot;</span><span class="p">,</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">&quot;birthDate&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1952-12-05&quot;</span><span class="p">,</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="nt">&quot;bio&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Software engineer and author&quot;</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<hr />
+<h3 id="43-categorycontroller">4.3 <code>CategoryController</code><a class="headerlink" href="#43-categorycontroller" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>HTTP</th>
+<th>Route</th>
+<th>Success</th>
+<th>Error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>index</code></td>
+<td>GET</td>
+<td><code>/api/v1/categories</code></td>
+<td>200 + list (with <code>bookCount</code>)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>show</code></td>
+<td>GET</td>
+<td><code>/api/v1/categories/{id}</code></td>
+<td>200 + category</td>
+<td>404</td>
+</tr>
+<tr>
+<td><code>save</code></td>
+<td>POST</td>
+<td><code>/api/v1/categories</code></td>
+<td>201 + category</td>
+<td>400, 409</td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td>PUT</td>
+<td><code>/api/v1/categories/{id}</code></td>
+<td>200 + category</td>
+<td>404, 409</td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td>DELETE</td>
+<td><code>/api/v1/categories/{id}</code></td>
+<td>204</td>
+<td>404, 400</td>
+</tr>
+</tbody>
+</table>
+<p>Note: <code>index</code> and <code>show</code> include <code>bookCount</code> in the response — computed as <code>category.books?.size() ?: 0</code>.</p>
+<hr />
+<h3 id="44-ordercontroller">4.4 <code>OrderController</code><a class="headerlink" href="#44-ordercontroller" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>HTTP</th>
+<th>Route</th>
+<th>Success</th>
+<th>Error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>save</code></td>
+<td>POST</td>
+<td><code>/api/v1/orders</code></td>
+<td>201 + order</td>
+<td>400</td>
+</tr>
+<tr>
+<td><code>show</code></td>
+<td>GET</td>
+<td><code>/api/v1/orders/{id}</code></td>
+<td>200 + order</td>
+<td>404</td>
+</tr>
+<tr>
+<td><code>byCustomer</code></td>
+<td>GET</td>
+<td><code>/api/v1/orders/customer/{customerId}</code></td>
+<td>200 + paginated</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>byStatus</code></td>
+<td>GET</td>
+<td><code>/api/v1/orders/status/{status}</code></td>
+<td>200 + paginated</td>
+<td>400 (invalid enum)</td>
+</tr>
+<tr>
+<td><code>updateStatus</code></td>
+<td>PATCH</td>
+<td><code>/api/v1/orders/{id}/status?newStatus=</code></td>
+<td>200 + order</td>
+<td>404, 400</td>
+</tr>
+<tr>
+<td><code>cancel</code></td>
+<td>POST</td>
+<td><code>/api/v1/orders/{id}/cancel</code></td>
+<td>200</td>
+<td>404, 400</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Request body for <code>save</code>:</strong>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;customerId&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">&quot;shippingAddress&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;42 Wallaby Way, Sydney&quot;</span><span class="p">,</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nt">&quot;notes&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Leave at door&quot;</span><span class="p">,</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;bookId&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;bookId&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<p><strong>Query param for <code>cancel</code>:</strong> <code>reason</code> (optional string; defaults to "Customer requested cancellation")</p>
+<hr />
+<h2 id="5-url-routing-specification">5. URL Routing Specification<a class="headerlink" href="#5-url-routing-specification" title="Permanent link">&para;</a></h2>
+<p><strong>File:</strong> <code>grails-app/conf/UrlMappings.groovy</code></p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="s2">&quot;/api/v1/books&quot;</span><span class="o">(</span><span class="nl">resources:</span><span class="w"> </span><span class="s1">&#39;book&#39;</span><span class="o">)</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="c1">// &#39;resources:&#39; generates 7 routes in total:</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="c1">//   GET    /api/v1/books              → index</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="c1">//   POST   /api/v1/books              → save</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="c1">//   GET    /api/v1/books/{id}         → show</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">  </span><span class="c1">//   PUT    /api/v1/books/{id}         → update  (PATCH also maps here)</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span><span class="c1">//   DELETE /api/v1/books/{id}         → delete</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">  </span><span class="c1">//   GET    /api/v1/books/create       → create  (browser-form scaffold — unused in JSON API)</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">  </span><span class="c1">//   GET    /api/v1/books/{id}/edit    → edit    (browser-form scaffold — unused in JSON API)</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="s2">&quot;/api/v1/books/search&quot;</span><span class="w">          </span><span class="err">→</span><span class="w"> </span><span class="n">GET</span><span class="w">  </span><span class="err">→</span><span class="w"> </span><span class="n">BookController</span><span class="o">.</span><span class="na">search</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="s2">&quot;/api/v1/books/isbn/$isbn&quot;</span><span class="w">      </span><span class="err">→</span><span class="w"> </span><span class="n">GET</span><span class="w">  </span><span class="err">→</span><span class="w"> </span><span class="n">BookController</span><span class="o">.</span><span class="na">findByIsbn</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="s2">&quot;/api/v1/books/low-stock&quot;</span><span class="w">       </span><span class="err">→</span><span class="w"> </span><span class="n">GET</span><span class="w">  </span><span class="err">→</span><span class="w"> </span><span class="n">BookController</span><span class="o">.</span><span class="na">lowStock</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="s2">&quot;/api/v1/authors&quot;</span><span class="o">(</span><span class="nl">resources:</span><span class="w"> </span><span class="s1">&#39;author&#39;</span><span class="o">)</span>
+</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="w">  </span><span class="c1">// Generates same 7 routes; create and edit are ignored (responseFormats = [&#39;json&#39;])</span>
+</span><span id="__span-11-17"><a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>
+</span><span id="__span-11-18"><a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="s2">&quot;/api/v1/categories&quot;</span><span class="o">(</span><span class="nl">resources:</span><span class="w"> </span><span class="s1">&#39;category&#39;</span><span class="o">)</span>
+</span><span id="__span-11-19"><a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="w">  </span><span class="c1">// Generates same 7 routes; create and edit are ignored</span>
+</span><span id="__span-11-20"><a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>
+</span><span id="__span-11-21"><a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="s2">&quot;/api/v1/orders&quot;</span><span class="o">(</span><span class="nl">resources:</span><span class="w"> </span><span class="s1">&#39;order&#39;</span><span class="o">,</span><span class="w"> </span><span class="nl">excludes:</span><span class="w"> </span><span class="o">[</span><span class="s1">&#39;delete&#39;</span><span class="o">])</span>
+</span><span id="__span-11-22"><a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="w">  </span><span class="c1">// Generates all except DELETE (cancellation is explicit, not a generic delete)</span>
+</span><span id="__span-11-23"><a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a>
+</span><span id="__span-11-24"><a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a><span class="s2">&quot;/api/v1/orders/$id/cancel&quot;</span><span class="w">     </span><span class="err">→</span><span class="w"> </span><span class="n">POST</span><span class="w">  </span><span class="err">→</span><span class="w"> </span><span class="n">OrderController</span><span class="o">.</span><span class="na">cancel</span>
+</span><span id="__span-11-25"><a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a><span class="s2">&quot;/api/v1/orders/customer/$customerId&quot;</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">GET</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">OrderController</span><span class="o">.</span><span class="na">byCustomer</span>
+</span><span id="__span-11-26"><a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="s2">&quot;/api/v1/orders/status/$status&quot;</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">GET</span><span class="w">  </span><span class="err">→</span><span class="w"> </span><span class="n">OrderController</span><span class="o">.</span><span class="na">byStatus</span>
+</span><span id="__span-11-27"><a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="s2">&quot;/api/v1/orders/$id/status&quot;</span><span class="w">     </span><span class="err">→</span><span class="w"> </span><span class="n">PATCH</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">OrderController</span><span class="o">.</span><span class="na">updateStatus</span>
+</span></code></pre></div>
+<hr />
+<h2 id="6-critical-flows-detailed">6. Critical Flows — Detailed<a class="headerlink" href="#6-critical-flows-detailed" title="Permanent link">&para;</a></h2>
+<h3 id="61-book-update-author-guard">6.1 Book Update — Author Guard<a class="headerlink" href="#61-book-update-author-guard" title="Permanent link">&para;</a></h3>
+<p><code>BookService.update()</code> only rebuilds the author association if the <code>authorIds</code> key is explicitly present in the payload. This prevents an unnecessary clear + rebuild when the client only changes, say, the price.</p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">book</span><span class="o">.</span><span class="na">properties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">payload</span><span class="o">.</span><span class="na">findAll</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">k</span><span class="o">,</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s2">&quot;authorIds&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s2">&quot;categoryId&quot;</span><span class="w"> </span><span class="o">}</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="k">if</span><span class="w"> </span><span class="o">(</span><span class="n">payload</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="s1">&#39;authorIds&#39;</span><span class="o">))</span><span class="w"> </span><span class="o">{</span><span class="w">       </span><span class="c1">// only if client sent this key</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="n">book</span><span class="o">.</span><span class="na">authors</span><span class="o">?.</span><span class="na">clear</span><span class="o">()</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="o">(</span><span class="n">payload</span><span class="o">.</span><span class="na">authorIds</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="o">[]).</span><span class="na">each</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">authorId</span><span class="w"> </span><span class="o">-&gt;</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">        </span><span class="kt">def</span><span class="w"> </span><span class="n">author</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Author</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">authorId</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">Long</span><span class="o">)</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="o">(</span><span class="n">author</span><span class="o">)</span><span class="w"> </span><span class="n">book</span><span class="o">.</span><span class="na">addToAuthors</span><span class="o">(</span><span class="n">author</span><span class="o">)</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="o">}</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="n">book</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="nl">flush:</span><span class="w"> </span><span class="kc">true</span><span class="o">,</span><span class="w"> </span><span class="nl">failOnError:</span><span class="w"> </span><span class="kc">true</span><span class="o">)</span>
+</span></code></pre></div>
+<h3 id="62-order-cancellation-stock-restoration">6.2 Order Cancellation — Stock Restoration<a class="headerlink" href="#62-order-cancellation-stock-restoration" title="Permanent link">&para;</a></h3>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">cancel</span><span class="o">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="o">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">reason</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">BookOrder</span><span class="w"> </span><span class="n">order</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BookOrder</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(!</span><span class="n">order</span><span class="o">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s2">&quot;Order not found&quot;</span><span class="o">)</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(!</span><span class="n">order</span><span class="o">.</span><span class="na">status</span><span class="o">.</span><span class="na">canTransitionTo</span><span class="o">(</span><span class="n">OrderStatus</span><span class="o">.</span><span class="na">CANCELLED</span><span class="o">))</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s2">&quot;Cannot cancel order in status ${order.status}&quot;</span><span class="o">)</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="c1">// Restore stock for every item</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">    </span><span class="n">order</span><span class="o">.</span><span class="na">orderItems</span><span class="o">.</span><span class="na">each</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">-&gt;</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">        </span><span class="n">item</span><span class="o">.</span><span class="na">book</span><span class="o">.</span><span class="na">stockQuantity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="na">book</span><span class="o">.</span><span class="na">stockQuantity</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="na">quantity</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">        </span><span class="n">item</span><span class="o">.</span><span class="na">book</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="nl">failOnError:</span><span class="w"> </span><span class="kc">true</span><span class="o">)</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">    </span><span class="n">order</span><span class="o">.</span><span class="na">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OrderStatus</span><span class="o">.</span><span class="na">CANCELLED</span>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">    </span><span class="n">order</span><span class="o">.</span><span class="na">notes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">order</span><span class="o">.</span><span class="na">notes</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;Cancellation reason: ${reason ?: &#39;Customer requested cancellation&#39;}&quot;</span><span class="o">]</span>
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="w">        </span><span class="o">.</span><span class="na">findAll</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">}.</span><span class="na">join</span><span class="o">(</span><span class="s2">&quot; | &quot;</span><span class="o">)</span>
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="w">    </span><span class="n">order</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="nl">flush:</span><span class="w"> </span><span class="kc">true</span><span class="o">,</span><span class="w"> </span><span class="nl">failOnError:</span><span class="w"> </span><span class="kc">true</span><span class="o">)</span>
+</span><span id="__span-13-16"><a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="o">}</span>
+</span></code></pre></div>
+<h3 id="63-pessimistic-lock-on-stock-decrement">6.3 Pessimistic Lock on Stock Decrement<a class="headerlink" href="#63-pessimistic-lock-on-stock-decrement" title="Permanent link">&para;</a></h3>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1">// Inside place() — for each order item</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">Book</span><span class="w"> </span><span class="n">book</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Book</span><span class="o">.</span><span class="na">lock</span><span class="o">(</span><span class="n">item</span><span class="o">.</span><span class="na">bookId</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">Long</span><span class="o">)</span><span class="w">   </span><span class="c1">// SELECT ... FOR UPDATE</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="k">if</span><span class="w"> </span><span class="o">(!</span><span class="n">book</span><span class="o">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s2">&quot;Book not found: ${item.bookId}&quot;</span><span class="o">)</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">Integer</span><span class="w"> </span><span class="n">qty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="na">quantity</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">Integer</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="k">if</span><span class="w"> </span><span class="o">(</span><span class="n">book</span><span class="o">.</span><span class="na">stockQuantity</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">qty</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s2">&quot;Insufficient stock for &#39;${book.title}&#39;&quot;</span><span class="o">)</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="o">}</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="n">book</span><span class="o">.</span><span class="na">stockQuantity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">book</span><span class="o">.</span><span class="na">stockQuantity</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">qty</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="n">book</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="nl">failOnError:</span><span class="w"> </span><span class="kc">true</span><span class="o">)</span>
+</span></code></pre></div>
+<p><code>Book.lock(id)</code> issues <code>SELECT * FROM book WHERE id = ? FOR UPDATE</code> — the row is locked until the transaction commits. Any concurrent request trying to lock the same row blocks until the first transaction completes, preventing oversell.</p>
+<hr />
+<h2 id="7-response-shapes">7. Response Shapes<a class="headerlink" href="#7-response-shapes" title="Permanent link">&para;</a></h2>
+<h3 id="success-response">Success Response<a class="headerlink" href="#success-response" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">{</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">&quot;success&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Book created successfully&quot;</span><span class="p">,</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Clean Code&quot;</span><span class="p">,</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">    </span><span class="nt">&quot;isbn&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;978-0-13-235088-4&quot;</span><span class="p">,</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">    </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">39.99</span><span class="p">,</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">    </span><span class="nt">&quot;stockQuantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">    </span><span class="nt">&quot;categoryId&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">    </span><span class="nt">&quot;categoryName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Software Engineering&quot;</span><span class="p">,</span>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="w">    </span><span class="nt">&quot;authors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;fullName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Robert Martin&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uncle.bob@example.com&quot;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="w">    </span><span class="p">],</span>
+</span><span id="__span-15-15"><a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="w">    </span><span class="nt">&quot;createdAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-11T10:30:00Z&quot;</span>
+</span><span id="__span-15-16"><a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-15-17"><a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-11T10:30:00.123Z&quot;</span>
+</span><span id="__span-15-18"><a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="error-response">Error Response<a class="headerlink" href="#error-response" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">{</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">&quot;success&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Error&quot;</span><span class="p">,</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Book with ISBN 978-0-13-235088-4 already exists&quot;</span><span class="p">,</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-11T10:30:00.123Z&quot;</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="paginated-response-lists">Paginated Response (lists)<a class="headerlink" href="#paginated-response-lists" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">{</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="nt">&quot;success&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Books retrieved&quot;</span><span class="p">,</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">],</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">    </span><span class="nt">&quot;totalElements&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">47</span><span class="p">,</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">    </span><span class="nt">&quot;page&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">    </span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<h2 id="8-http-status-code-reference">8. HTTP Status Code Reference<a class="headerlink" href="#8-http-status-code-reference" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>When Used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>Successful GET, PUT, PATCH</td>
+</tr>
+<tr>
+<td>201</td>
+<td>Successful POST (resource created)</td>
+</tr>
+<tr>
+<td>204</td>
+<td>Successful DELETE (no body)</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Business rule violation, validation failure, invalid enum value</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Resource not found</td>
+</tr>
+<tr>
+<td>409</td>
+<td>Duplicate name/email (CategoryController, AuthorController)</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Unhandled exception (mapped by Grails error view)</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.instant", "navigation.tracking", "navigation.indexes", "toc.follow", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight", "search.share"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
