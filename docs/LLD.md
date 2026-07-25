@@ -166,6 +166,24 @@ PENDING ──► CONFIRMED ──► PROCESSING ──► SHIPPED ──► DEL
    └──────────────┴──► CANCELLED
 ```
 
+!!! note "Rendered equivalent"
+
+    The same state machine as a Mermaid state diagram. The ASCII sketch above is the original; this is a rendered version of it. `CANCELLED` and `REFUNDED` are terminal.
+
+```mermaid
+stateDiagram-v2
+    [*] --> PENDING
+    PENDING --> CONFIRMED
+    PENDING --> CANCELLED
+    CONFIRMED --> PROCESSING
+    CONFIRMED --> CANCELLED
+    PROCESSING --> SHIPPED
+    SHIPPED --> DELIVERED
+    DELIVERED --> REFUNDED
+    CANCELLED --> [*]
+    REFUNDED --> [*]
+```
+
 **Valid transitions defined by `canTransitionTo(OrderStatus target)`:**
 
 | Current State | Allowed Next States |
@@ -259,6 +277,81 @@ GORM's `dbCreate: update` generates and maintains this schema automatically.
 │ date_created          │
 │ last_updated          │
 └───────────────────────┘
+```
+
+!!! note "Rendered equivalent"
+
+    The same generated schema as a Mermaid ER diagram. The ASCII table sketch above is the original; this is a rendered version of it, with the `book_author` join table expressed as a many-to-many relationship.
+
+```mermaid
+erDiagram
+    category {
+        bigint id PK
+        varchar name UK
+        varchar description
+        datetime date_created
+        datetime last_updated
+    }
+    author {
+        bigint id PK
+        varchar first_name
+        varchar last_name
+        varchar email UK
+        date birth_date
+        text bio
+        datetime date_created
+        datetime last_updated
+    }
+    book {
+        bigint id PK
+        varchar title
+        varchar isbn UK
+        decimal price
+        int stock_quantity
+        date publication_date
+        text description
+        varchar cover_image_url
+        bigint category_id FK
+        datetime date_created
+        datetime last_updated
+    }
+    customer {
+        bigint id PK
+        varchar first_name
+        varchar last_name
+        varchar email UK
+        varchar phone
+        varchar address
+        varchar status
+        datetime date_created
+        datetime last_updated
+    }
+    book_order {
+        bigint id PK
+        bigint customer_id FK
+        varchar status
+        decimal total_amount
+        varchar shipping_address
+        varchar notes
+        datetime shipped_at
+        datetime delivered_at
+        datetime date_created
+        datetime last_updated
+    }
+    order_item {
+        bigint id PK
+        bigint order_id FK
+        bigint book_id FK
+        int quantity
+        decimal price_at_purchase
+        datetime date_created
+    }
+
+    category   ||--o{ book       : "category_id"
+    author     }o--o{ book       : "book_author join"
+    customer   ||--o{ book_order : "customer_id"
+    book_order ||--o{ order_item : "order_id"
+    book       ||--o{ order_item : "book_id"
 ```
 
 ---

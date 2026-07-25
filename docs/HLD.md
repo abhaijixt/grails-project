@@ -99,6 +99,19 @@ Category ──< Book >── Author
 Customer ──< BookOrder >── OrderItem ──> Book
 ```
 
+!!! note "Rendered equivalent"
+
+    The same entity relationships as a Mermaid ER diagram. The ASCII sketch above is the original; this is a rendered version of it, with the join table between `Book` and `Author` shown as a many-to-many relationship.
+
+```mermaid
+erDiagram
+    CATEGORY  ||--o{ BOOK       : "groups"
+    AUTHOR    }o--o{ BOOK       : "writes (book_author)"
+    CUSTOMER  ||--o{ BOOK_ORDER : "places"
+    BOOK_ORDER||--o{ ORDER_ITEM : "contains"
+    BOOK      ||--o{ ORDER_ITEM : "is ordered as"
+```
+
 Six persistent entities:
 
 | Entity | Responsibility |
@@ -220,6 +233,29 @@ OrderService.place(payload)
         ▼
 OrderController
   render 201 + orderService.toDto(order)
+```
+
+!!! note "Rendered equivalent"
+
+    The same order-placement flow as a Mermaid diagram. The ASCII trace above is the original; this is a rendered version of it.
+
+```mermaid
+flowchart TD
+    A["POST /api/v1/orders"] --> B["OrderController.save()<br/>parse request.JSON as Map"]
+    B --> C["OrderService.place(payload)"]
+    C --> D{"Customer found<br/>and ACTIVE?"}
+    D -- no --> E["throw — order rejected"]
+    D -- yes --> F["Save empty BookOrder<br/>status = PENDING"]
+    F --> G["For each item in payload.items"]
+    G --> H["Book.lock(bookId)<br/>pessimistic lock"]
+    H --> I{"stockQuantity >= qty?"}
+    I -- no --> J["throw — insufficient stock"]
+    I -- yes --> K["Decrement stock, save Book"]
+    K --> L["Create OrderItem<br/>price snapshot"]
+    L --> G
+    G -- all items done --> M["recalculateTotal()"]
+    M --> N["Save and flush BookOrder"]
+    N --> O["render 201 +<br/>orderService.toDto(order)"]
 ```
 
 ---

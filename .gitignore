@@ -1,0 +1,3 @@
+# MkDocs build output (see mkdocs.yml -> site_dir). Anchored to the repo root
+# so the unrelated docs/site/ directory is left alone.
+/site/

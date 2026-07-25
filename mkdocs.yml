@@ -1,0 +1,106 @@
+site_name: Grails Bookstore — Design Docs
+site_description: >-
+  High-level design, low-level design, and a file-by-file code walkthrough
+  for the Grails 6 bookstore REST API.
+site_url: https://abhaijixt.github.io/grails-project/
+repo_url: https://github.com/abhaijixt/grails-project
+repo_name: abhaijixt/grails-project
+edit_uri: edit/main/docs/
+
+docs_dir: docs
+site_dir: site
+
+# docs/CODE_WALKTHROUGH.md is kept on disk as the source of truth, but is not
+# built — its content is served from docs/walkthrough/, split one page per
+# section. Excluding it here avoids publishing the same text at two URLs.
+# docs/site/ is a pre-existing unrelated static site, not part of these docs.
+exclude_docs: |
+  CODE_WALKTHROUGH.md
+  site/
+
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.instant
+    - navigation.tracking
+    - navigation.indexes
+    - toc.follow
+    - content.code.copy
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+    - search.share
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+
+markdown_extensions:
+  # Admonitions (!!! note / !!! tip) and collapsible variants
+  - admonition
+  - pymdownx.details
+  # Code syntax highlighting
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  # Superfences — also drives Mermaid rendering via the custom fence below
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  # Material icons/emoji shortcodes used on the landing page
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  # Tables, footnotes, attribute lists, and HTML-wrapped Markdown (grid cards)
+  - tables
+  - footnotes
+  - attr_list
+  - md_in_html
+  - def_list
+  - toc:
+      permalink: true
+      toc_depth: 3
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+nav:
+  - Home: index.md
+  - High-Level Design: HLD.md
+  - Low-Level Design: LLD.md
+  - Code Walkthrough:
+      - walkthrough/index.md
+      - Configuration & Build: walkthrough/configuration.md
+      - Domain Layer: walkthrough/domain.md
+      - Service Layer: walkthrough/services.md
+      - Controller Layer: walkthrough/controllers.md
+      - Entry Point & Key Patterns: walkthrough/entry-point.md
