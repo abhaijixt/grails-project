@@ -1,6 +1,6 @@
 # Grails/Groovy Equivalent - Bookstore CRUD
 
-This directory contains a Grails 6 + Groovy implementation equivalent to the existing Spring Boot CRUD API.
+This directory contains a Grails 2.5.6 + Groovy 2.4.x implementation equivalent to the existing Spring Boot CRUD API.
 
 ## Implemented API Surface
 
@@ -25,12 +25,36 @@ This directory contains a Grails 6 + Groovy implementation equivalent to the exi
   REST controllers wired to `/api/v1/...` endpoints.
 - `grails-app/conf/UrlMappings.groovy`  
   Route mapping for custom actions (`search`, `lowStock`, `byCustomer`, `updateStatus`, etc.).
+- `grails-app/conf/BuildConfig.groovy`  
+  Dependency and plugin resolution (Grails 2 build; there is no Gradle build).
+- `grails-app/conf/Config.groovy` / `DataSource.groovy`  
+  Application config and per-environment datasources.
 
-## Run (when Grails/Gradle is available)
+## Toolchain
+
+| Component | Version |
+|---|---|
+| Grails | 2.5.6 (`application.properties` -> `app.grails.version`) |
+| Groovy | 2.4.x (supplied by the Grails 2.5.6 distribution) |
+| JDK | 7 or 8 **only** — Grails 2.5.6 does not run on JDK 9+ |
+| GORM / Hibernate | `hibernate` plugin 3.6.10.19 (Hibernate 3.6.10) |
+| Servlet container | `tomcat` plugin 8.0.50 |
+
+## Run
+
+Requires the Grails 2.5.6 SDK on `PATH` and `JAVA_HOME` pointing at a JDK 8:
 
 ```bash
 cd grails-bookstore
-./gradlew bootRun
+grails refresh-dependencies
+grails run-app
+```
+
+Other useful targets:
+
+```bash
+grails test-app          # runs test/unit and test/integration
+grails war               # builds target/grails-bookstore-1.0.0.war
 ```
 
 ## Documentation
