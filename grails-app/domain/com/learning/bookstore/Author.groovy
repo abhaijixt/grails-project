@@ -10,6 +10,10 @@ class Author {
     Date lastUpdated
 
     static hasMany = [books: Book]
+    // GORM 3.x requires an explicit owner on a bidirectional many-to-many.
+    // Book owns it: BookService drives the association via book.addToAuthors(...).
+    // Many-to-many caps at save-update cascade, so deleting a Book never deletes Authors.
+    static belongsTo = Book
 
     static constraints = {
         firstName blank: false, maxSize: 100
