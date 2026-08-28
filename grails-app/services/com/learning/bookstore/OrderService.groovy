@@ -1,6 +1,6 @@
 package com.learning.bookstore
 
-import grails.gorm.transactions.Transactional
+import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class OrderService {

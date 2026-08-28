@@ -1,6 +1,6 @@
 package com.learning.bookstore
 
-import grails.gorm.transactions.Transactional
+import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class BookService {
@@ -18,6 +18,8 @@ class BookService {
     Map search(Map params) {
         Integer max = Math.min((params.int('size') ?: 10), 100)
         Integer offset = (params.int('page') ?: 0) * max
+        BigDecimal minPrice = toBigDecimal(params.minPrice)
+        BigDecimal maxPrice = toBigDecimal(params.maxPrice)
 
         def books = Book.createCriteria().list(max: max, offset: offset, sort: "title", order: "asc") {
             if (params.title) {
@@ -26,17 +28,28 @@ class BookService {
             if (params.categoryId) {
                 eq("category", Category.get(params.long('categoryId')))
             }
-            if (params.minPrice) {
-                ge("price", params.bigDecimal('minPrice'))
+            if (minPrice != null) {
+                ge("price", minPrice)
             }
-            if (params.maxPrice) {
-                le("price", params.bigDecimal('maxPrice'))
+            if (maxPrice != null) {
+                le("price", maxPrice)
             }
             if (params.inStock == 'true') {
                 gt("stockQuantity", 0)
             }
         }
         [content: books.collect { toDto(it) }, totalElements: books.totalCount, page: (params.int('page') ?: 0), size: max]
+    }
+
+    // Grails 2.5 params has no bigDecimal() converter, so parse by hand and
+    // treat an unparseable value as "filter not supplied".
+    private static BigDecimal toBigDecimal(Object value) {
+        if (value == null) return null
+        try {
+            return new BigDecimal(value.toString().trim())
+        } catch (NumberFormatException ignored) {
+            return null
+        }
     }
 
     Book getById(Long id) {
