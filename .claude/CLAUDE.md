@@ -96,7 +96,7 @@ There is no wrapper to commit and no daemon. `grails` resolves everything throug
 8. **Stock decrement holds a pessimistic lock** — `Book.lock(id)` in `OrderService.place`.
    A write path that loads a book any other way can oversell it.
 9. **Write Grails 2.5.6, not modern Grails.** Before using any Grails/GORM/Spock API, check
-   `.claude/context/grails-version-compat.md`. Docs live at `grails.github.io/grails2-doc/2.5.6/`
+   `.claude/context/grails-version-compat.md`. Docs live at `grails.apache.org/docs/2.5.6/`
    — never a `/latest/` URL.
 10. **Only `deploy-local.yml` may target the self-hosted runner**, and it must never gain a
     `pull_request` trigger. The repo is public; that combination is remote code execution on
