@@ -68,6 +68,12 @@ class OrderService {
         if (!order.status.canTransitionTo(newStatus)) {
             throw new IllegalArgumentException("Invalid status transition: ${order.status} -> ${newStatus}")
         }
+        // CANCELLED is reachable from here as well as from cancel(), and entering it must
+        // return the reserved stock either way. Leaving this to cancel() alone silently
+        // destroyed inventory whenever the status route was used instead.
+        if (newStatus == OrderStatus.CANCELLED) {
+            restoreStock(order)
+        }
         order.status = newStatus
         if (newStatus == OrderStatus.SHIPPED) order.shippedAt = new Date()
         if (newStatus == OrderStatus.DELIVERED) order.deliveredAt = new Date()
@@ -82,13 +88,25 @@ class OrderService {
         if (!order.status.canTransitionTo(OrderStatus.CANCELLED)) {
             throw new IllegalArgumentException("Cannot cancel order in status ${order.status}")
         }
+        restoreStock(order)
+        order.status = OrderStatus.CANCELLED
+        order.notes = [order.notes, "Cancellation reason: ${reason ?: 'Customer requested cancellation'}"].findAll { it }.join(" | ")
+        order.save(flush: true, failOnError: true)
+    }
+
+    /**
+     * Returns the units an order reserved back to stock. The single home for the invariant
+     * "entering CANCELLED releases the reservation" — both routes into that state call it.
+     *
+     * The transition guard is the caller's job: OrderStatus.CANCELLED can transition to
+     * nothing, so a second cancellation is rejected before reaching here and stock cannot
+     * be credited twice.
+     */
+    private void restoreStock(BookOrder order) {
         order.orderItems.each { item ->
             item.book.stockQuantity = item.book.stockQuantity + item.quantity
             item.book.save(failOnError: true)
         }
-        order.status = OrderStatus.CANCELLED
-        order.notes = [order.notes, "Cancellation reason: ${reason ?: 'Customer requested cancellation'}"].findAll { it }.join(" | ")
-        order.save(flush: true, failOnError: true)
     }
 
     Map toDto(BookOrder order) {
