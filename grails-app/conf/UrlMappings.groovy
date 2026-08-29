@@ -1,5 +1,9 @@
 class UrlMappings {
     static mappings = {
+        // Probed by the deploy pipeline and by anything watching the app.
+        "/health"(controller: "health", action: "index", method: "GET")
+        "/api/v1/health"(controller: "health", action: "index", method: "GET")
+
         "/api/v1/books"(resources: 'book')
         "/api/v1/books/search"(controller: "book", action: "search", method: "GET")
         "/api/v1/books/isbn/$isbn"(controller: "book", action: "findByIsbn", method: "GET")

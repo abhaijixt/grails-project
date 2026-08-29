@@ -1,0 +1,139 @@
+name: Deploy app (laptop)
+
+# Builds the production WAR with the Grails 2.5.6 / JDK 8 toolchain installed on
+# the laptop, then runs it there in a Tomcat container. Requires the self-hosted
+# runner registered by scripts/setup-self-hosted-runner.sh.
+#
+# SECURITY: this is the only workflow allowed to target the self-hosted runner,
+# and it deliberately has no `pull_request` trigger. A fork PR that could run
+# here would be arbitrary code execution on the laptop. See CICD.md.
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - 'knowledge-base/**'
+      - 'site/**'
+      - '**/*.md'
+      - 'mkdocs.yml'
+      - 'requirements-docs.txt'
+      - '.github/workflows/deploy-docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deploy at a time: two runs racing would fight over the container name and
+# the `current` release symlink.
+concurrency:
+  group: deploy-local
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, linux, grails-laptop]
+    timeout-minutes: 30
+
+    # Records every deploy in the repository's Deployments timeline and scopes
+    # DB_PASSWORD to this environment. The environment restricts deploys to main.
+    environment:
+      name: production
+      url: http://localhost:8080/health
+
+    env:
+      APP_NAME: grails-bookstore
+      APP_PORT: '8080'
+      TOMCAT_IMAGE: tomcat:8.5-jre8
+      HEALTH_PATH: /health
+      # Production DataSource.groovy reads these from the environment.
+      # Override the two non-secret ones with repository variables if needed.
+      DB_URL: ${{ vars.DB_URL || 'jdbc:mariadb://127.0.0.1:3306/bookstore_db?useSSL=false' }}
+      DB_USER: ${{ vars.DB_USER || 'bookstore_app' }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Resolve the JDK 8 + Grails 2.5.6 toolchain
+        env:
+          # Point these repository variables elsewhere if SDKMAN moves.
+          JAVA8_HOME: ${{ vars.JAVA8_HOME }}
+          GRAILS_2_HOME: ${{ vars.GRAILS_2_HOME }}
+        run: |
+          set -euo pipefail
+          java_home="${JAVA8_HOME:-$HOME/.sdkman/candidates/java/current}"
+          grails_home="${GRAILS_2_HOME:-$HOME/.sdkman/candidates/grails/current}"
+
+          [ -x "$java_home/bin/java" ] || { echo "No JDK at $java_home"; exit 1; }
+          [ -x "$grails_home/bin/grails" ] || { echo "No Grails at $grails_home"; exit 1; }
+
+          # The runner's default `java` is the system JDK 26. Groovy 2.4 cannot
+          # run on it, so pin the toolchain explicitly and fail loudly if the
+          # versions ever drift rather than dying inside the Grails build.
+          java_version="$("$java_home/bin/java" -version 2>&1 | head -1)"
+          case "$java_version" in
+            *'"1.8'*) ;;
+            *) echo "Grails 2.5.6 needs JDK 8, found: $java_version"; exit 1 ;;
+          esac
+
+          echo "JAVA_HOME=$java_home" >> "$GITHUB_ENV"
+          echo "GRAILS_HOME=$grails_home" >> "$GITHUB_ENV"
+          echo "$java_home/bin" >> "$GITHUB_PATH"
+          echo "$grails_home/bin" >> "$GITHUB_PATH"
+          echo "$java_version"
+
+      - name: Unit tests
+        # Quoted: a trailing colon would otherwise parse as a YAML mapping.
+        run: "grails --non-interactive test-app unit:"
+
+      - name: Package the production WAR
+        run: |
+          set -euo pipefail
+          ./scripts/stamp-build-metadata.sh
+          grails --non-interactive clean
+          grails --non-interactive prod war "target/${APP_NAME}.war"
+          ls -l "target/${APP_NAME}.war"
+
+      # Archived off the laptop: rollback otherwise depends entirely on
+      # ~/deploys surviving.
+      - name: Upload WAR
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ env.APP_NAME }}-war-${{ github.run_number }}
+          path: target/${{ env.APP_NAME }}.war
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Deploy to the local Tomcat container
+        env:
+          WAR_PATH: ${{ github.workspace }}/target/${{ env.APP_NAME }}.war
+          RELEASE_ID: r${{ github.run_number }}-${{ github.sha }}
+          RELEASE_COMMIT: ${{ github.sha }}
+          RELEASE_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: ./scripts/deploy-local.sh
+
+      - name: Notify on failure
+        if: failure()
+        run: ./scripts/notify-failure.sh
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      - name: Summarise
+        if: always()
+        run: |
+          {
+            echo "### ${APP_NAME}"
+            echo
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Result | ${{ job.status }} |"
+            echo "| Commit | \`${GITHUB_SHA:0:12}\` |"
+            echo "| Release | \`r${{ github.run_number }}\` |"
+            echo "| Health | http://localhost:${APP_PORT}${HEALTH_PATH} |"
+          } >> "$GITHUB_STEP_SUMMARY"

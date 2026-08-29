@@ -1,17 +1,29 @@
 # Grails Bookstore
 
-A RESTful back-end API for a bookstore, built with Grails 6.1.2 on Spring Boot 2.7 and Groovy, persisting through GORM/Hibernate to MariaDB (H2 in tests). There is no front-end — every endpoint under `/api/v1/` speaks JSON, wrapped in a consistent `success` / `message` / `data` / `timestamp` envelope. It manages books, authors, categories, customers, and orders, with real business rules behind them: pessimistic locking on stock decrement, an order state machine that rejects invalid transitions, price snapshots on order lines, and referential-integrity guards in the service layer.
+A RESTful back-end API for a bookstore, built with Grails 2.5.6 and Groovy 2.4, persisting through GORM/Hibernate to MariaDB (H2 in tests). There is no front-end — every endpoint under `/api/v1/` speaks JSON, wrapped in a consistent `success` / `message` / `data` / `timestamp` envelope. It manages books, authors, categories, customers, and orders, with real business rules behind them: pessimistic locking on stock decrement, an order state machine that rejects invalid transitions, price snapshots on order lines, and referential-integrity guards in the service layer.
 
 ## Running the App
 
-The Gradle wrapper is committed, so no local Gradle install is needed:
+Grails 2.5.6 is the build tool — there is no Gradle wrapper. It needs **JDK 8**;
+Groovy 2.4 cannot run on a newer JVM.
 
 ```bash
+export JAVA_HOME=~/.sdkman/candidates/java/current   # a JDK 8
+export PATH="$JAVA_HOME/bin:$HOME/.sdkman/candidates/grails/current/bin:$PATH"
+
 cd grails-bookstore
-./gradlew bootRun
+grails run-app
 ```
 
-The API comes up on `http://localhost:8080`. The `development` environment expects MariaDB at `localhost:3306/bookstore_db`; see [Configuration Environments](HLD.md#9-configuration-environments) for the per-environment database settings.
+The API comes up on `http://localhost:8080/grails-bookstore/`, and the health
+probe at `/grails-bookstore/health` reports whether the database is reachable.
+The `development` environment expects MariaDB at `localhost:3306/bookstore_db_dev`
+— a different database from production — with the password supplied outside the
+repository. See [Configuration Environments](HLD.md#9-configuration-environments)
+for the full matrix.
+
+The deployed WAR is packaged as `ROOT.war`, so in production the same routes sit
+at the server root: `http://localhost:8080/health`.
 
 ## The Documentation
 
