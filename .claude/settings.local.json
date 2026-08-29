@@ -1,15 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(xargs '-I{}' sh -c 'dir=$\\(dirname {}\\); cat \"$dir/gradle-wrapper.properties\" 2>/dev/null | grep distributionUrl | head -1 && echo \" <- $dir\"')",
-      "Bash(chmod +x /home/abhaijixt/code/project-based-learning/Crud/grails-bookstore/gradlew)",
-      "Bash(./gradlew *)",
       "Bash(java -version)",
-      "Read(//usr/lib/jvm/**)",
-      "Bash(JAVA_HOME=/usr/lib/jvm/java-17-openjdk ./gradlew --version.)",
-      "Bash(JAVA_HOME=/usr/lib/jvm/java-17-openjdk ./gradlew compileGroovy)",
-      "Bash(JAVA_HOME=/usr/lib/jvm/java-17-openjdk ./gradlew compileGroovy --stacktrace)",
-      "Bash(jar tf *)"
+      "Bash(jar tf *)",
+      "Read(//usr/lib/jvm/**)"
     ]
   }
 }
