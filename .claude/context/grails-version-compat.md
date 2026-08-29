@@ -42,15 +42,37 @@ Two independent sources agree on 2.5.6: `application.properties:3` and the delib
 
 Grails moved to the Apache Software Foundation, and the docs moved with it.
 
-| Source | Use it? |
-|---|---|
-| `https://grails.github.io/grails2-doc/2.5.6/guide/single.html` | ✅ the 2.5.6 guide |
-| `https://grails.github.io/grails2-doc/2.5.6/api/index.html` | ✅ the 2.5.6 API |
-| `https://docs.grails.org/latest/...` | ❌ **never** — serves Grails 7 |
-| `https://grails.org/documentation.html` | ❌ current versions only |
+**Verified by fetching, 2026-08-29 — not assumed:**
 
-A `/latest/` URL will confidently answer a Grails 2 question with a Grails 7 answer. The two
-frameworks share a name and very little else.
+| Source | Serves | Use it? |
+|---|---|---|
+| `https://grails.apache.org/docs/2.5.6/guide/single.html` | page title *The Grails Framework 2.5.6*, 1.4 MB | ✅ **the guide** |
+| `https://grails.apache.org/docs/2.5.6/api/index.html` | 2.5.6 API | ✅ **the API** |
+| `https://grails.github.io/grails2-doc/2.5.6/...` | a 364-byte meta-refresh stub | ⚠️ redirects to the Apache URL above — use the destination directly |
+| `https://grails.apache.org/docs/latest/guide/single.html` | page title *The Grails Framework 7.1.6* | ❌ **never** |
+| `https://docs.grails.org/latest/...` | same, via redirect | ❌ **never** |
+
+> **The github.io mirror is a trap for automated checks.** It returns HTTP 200 and looks alive,
+> but the body is only a `<meta http-equiv="refresh">` pointing at `grails.apache.org`. `curl -L`
+> does not follow meta-refresh, so a status-code check passes while the content is 364 bytes of
+> nothing. Fetch the Apache URL directly.
+
+A `/latest/` URL will confidently answer a Grails 2 question with a Grails 7 answer. Measured
+against the two guides, side by side:
+
+| Term | in 2.5.6 | in 7.1.6 |
+|---|---|---|
+| `grails.transaction.Transactional` — what this repo uses | 2 | 1 |
+| `grails.gorm.transactions.Transactional` — the modern import | **0** | 18 |
+| `BuildConfig.groovy` — this repo's build file | 51 | **0** |
+| `application.yml` — the modern config file | **0** | 140 |
+| `DataSource.groovy` — this repo's DB config | 13 | **0** |
+| `@TestFor` — this repo's test style | 47 | 1 |
+| `@Integration` — the modern test style | **0** | 18 |
+| `GrailsApp.run` — the modern entry point | **0** | 2 |
+
+Four of the eight appear in exactly one of the two guides. That is the whole hazard in one
+table: the framework kept its name and replaced its API.
 
 ---
 
