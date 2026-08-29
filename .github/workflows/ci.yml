@@ -1,0 +1,123 @@
+name: CI
+
+# Compile, test and package every change before it can reach main.
+#
+# This workflow runs untrusted code — pull requests, including forks — so it
+# stays on GitHub-hosted runners. It must never target the self-hosted runner:
+# that would hand a fork PR arbitrary code execution on the laptop.
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - 'knowledge-base/**'
+      - 'site/**'
+      - '**/*.md'
+      - 'mkdocs.yml'
+      - 'requirements-docs.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  GRAILS_VERSION: '2.5.6'
+
+jobs:
+  build:
+    name: Compile, test, package
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Groovy 2.4 cannot emit or run bytecode above 1.8.
+      - uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c # v6.0.0
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      # The Grails 2 distribution and its resolved dependencies are both large
+      # and slow to fetch; without this every run re-downloads ~200MB.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/grails
+            ~/.grails
+            ~/.m2/repository
+          key: grails-${{ env.GRAILS_VERSION }}-${{ hashFiles('grails-app/conf/BuildConfig.groovy') }}
+          restore-keys: |
+            grails-${{ env.GRAILS_VERSION }}-
+
+      - name: Install Grails ${{ env.GRAILS_VERSION }}
+        run: |
+          set -euo pipefail
+          target="$HOME/grails/grails-${GRAILS_VERSION}"
+          if [ ! -x "$target/bin/grails" ]; then
+            curl -fsSL -o /tmp/grails.zip \
+              "https://github.com/grails/grails-core/releases/download/v${GRAILS_VERSION}/grails-${GRAILS_VERSION}.zip"
+            mkdir -p "$HOME/grails"
+            unzip -q /tmp/grails.zip -d "$HOME/grails"
+            chmod +x "$target/bin/grails"
+          fi
+          echo "$target/bin" >> "$GITHUB_PATH"
+          echo "GRAILS_HOME=$target" >> "$GITHUB_ENV"
+
+      - name: Compile
+        run: grails --non-interactive compile
+
+      - name: Unit tests
+        # Quoted: a trailing colon would otherwise parse as a YAML mapping.
+        run: "grails --non-interactive test-app unit:"
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: test-reports-${{ github.run_number }}
+          path: target/test-reports/
+          retention-days: 14
+          if-no-files-found: warn
+
+      # Packaging is part of CI because `war` exercises GSP compilation and
+      # plugin packaging, which `compile` and `test-app` never touch.
+      - name: Package production WAR
+        run: |
+          set -euo pipefail
+          ./scripts/stamp-build-metadata.sh
+          grails --non-interactive prod war target/grails-bookstore.war
+
+      - name: Upload WAR
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: grails-bookstore-war-${{ github.run_number }}
+          path: target/grails-bookstore.war
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Summarise
+        if: always()
+        run: |
+          {
+            echo "### CI — \`${GITHUB_SHA:0:12}\`"
+            echo
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Result | ${{ job.status }} |"
+            echo "| Grails | ${GRAILS_VERSION} |"
+            echo "| Java | $(java -version 2>&1 | head -1) |"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -12,15 +12,21 @@ A RESTful back-end API for a bookstore. Clients (browser, mobile app, Postman) c
 
 | Layer | Technology | Version |
 |---|---|---|
-| Language | Apache Groovy | 4.x (managed by Grails) |
-| Framework | Grails | 6.1.2 |
-| Runtime | Spring Boot | 2.7.18 |
-| ORM | GORM + Hibernate | 8.1.1 / 5.6.15 |
+| Language | Apache Groovy | 2.4.x (managed by Grails) |
+| Framework | Grails | 2.5.6 |
+| Runtime | Servlet container (no embedded runtime) | Servlet 3.0 |
+| ORM | GORM + Hibernate | 3.x / 3.6.10 |
 | Database (dev/prod) | MariaDB | 10.x |
-| Database (test) | H2 in-memory | — |
-| Build | Gradle + Wrapper | 7.6.4 |
-| JVM | OpenJDK | 17 |
+| Database (test) | H2 in-memory | 1.3.176 |
+| JDBC driver | MariaDB Java client | 1.5.9 (JDBC 4.1) |
+| Build | `grails` CLI + Ivy | 2.5.6 |
+| JVM | OpenJDK | 8 |
 | Packaging | WAR | — |
+| Deployment runtime | Tomcat (container image) | 8.5 / JRE 8 |
+
+**The JDK 8 pin is load-bearing.** Groovy 2.4 cannot emit or run bytecode above
+1.8 and will not start on a newer JVM, so every build path asserts the Java
+version before invoking `grails`.
 
 ---
 
@@ -262,13 +268,25 @@ flowchart TD
 
 ## 9. Configuration Environments
 
-| Environment | Database | DDL Strategy | Credentials |
-|---|---|---|---|
-| `development` | MariaDB `localhost:3306/bookstore_db` | `update` | `developer` / `dev_password_123` |
-| `test` | H2 in-memory | `create-drop` | `sa` / `""` |
-| `production` | MariaDB via `$DB_URL` | `none` | `$DB_USER` / `$DB_PASSWORD` |
+| Environment | Database | DDL Strategy | Account | Password source |
+|---|---|---|---|---|
+| `development` | MariaDB `localhost:3306/bookstore_db_dev` | `update` | `bookstore_dev` (all privileges on that database) | `DEV_DB_PASSWORD`, or `~/.grails/bookstore-local.groovy` |
+| `test` | H2 in-memory | `create-drop` | `sa` | none needed |
+| `production` | MariaDB `localhost:3306/bookstore_db` | `none` | `bookstore_app` (DML only) | `DB_PASSWORD` from the deploy environment |
 
-`dbCreate: none` in production means Hibernate will not auto-alter the schema. Schema changes must be applied through migration scripts manually before deployment.
+**Development and production are separate databases.** They shared
+`bookstore_db` until 2026-08-29, which meant development's `dbCreate = "update"`
+could rewrite production's schema whenever a domain class changed.
+
+**No credentials live in the repository.** `DataSource.groovy` reads every
+password from the environment or from an external config file outside the
+project tree.
+
+`dbCreate: none` in production means Hibernate will not auto-alter the schema,
+and the `bookstore_app` account holds no `CREATE`, `ALTER` or `DROP` rights, so
+it could not do so even if the setting changed. Schema changes must be applied
+deliberately before the deploy that needs them — there is currently no migration
+tooling in the project.
 
 ---
 
@@ -277,13 +295,27 @@ flowchart TD
 ```
 grails-bookstore/
 ├── docs/                        ← Design documents (HLD, LLD, Code Walkthrough)
-├── gradle/wrapper/              ← Gradle 7.6.4 wrapper
-├── gradle.properties            ← Java 17, grailsVersion, gormVersion
-├── build.gradle                 ← Dependencies, plugins
-├── settings.gradle              ← Root project name
+├── application.properties       ← Grails version, app name, build stamp
+├── CICD.md                      ← Pipeline: CI, deploy, security model
+├── DEPLOY-LOCAL.md              ← Deployment target detail
+├── .github/workflows/
+│   ├── ci.yml                   ← Compile, test, package (hosted runners)
+│   ├── deploy-local.yml         ← Build and deploy (self-hosted runner)
+│   └── deploy-docs.yml          ← This documentation site
+├── scripts/
+│   ├── deploy-local.sh          ← Releases, container lifecycle, health gate
+│   ├── stamp-build-metadata.sh  ← Commit/build stamp into application.properties
+│   ├── notify-failure.sh        ← Failure log + desktop notification
+│   └── setup-self-hosted-runner.sh
+├── web-app/WEB-INF/             ← applicationContext.xml, sitemesh.xml
+├── test/unit/com/learning/bookstore/
+│   └── *Spec.groovy             ← 70 unit tests
 └── grails-app/
     ├── conf/
-    │   ├── application.yml      ← DB config per environment
+    │   ├── BuildConfig.groovy   ← Dependencies, plugins, JVM targets
+    │   ├── DataSource.groovy    ← DB config per environment (no credentials)
+    │   ├── Config.groovy        ← App config, external config, log4j
+    │   ├── BootStrap.groovy     ← Lifecycle hooks
     │   └── UrlMappings.groovy   ← All REST routes
     ├── domain/com/learning/bookstore/
     │   ├── Book.groovy
@@ -299,14 +331,16 @@ grails-bookstore/
     │   ├── OrderService.groovy
     │   ├── AuthorService.groovy
     │   └── ApiResponseService.groovy
-    ├── controllers/com/learning/bookstore/
-    │   ├── BookController.groovy
-    │   ├── AuthorController.groovy
-    │   ├── CategoryController.groovy
-    │   └── OrderController.groovy
-    └── init/com/learning/bookstore/
-        └── Application.groovy   ← Spring Boot entry point
+    └── controllers/com/learning/bookstore/
+        ├── BookController.groovy
+        ├── AuthorController.groovy
+        ├── CategoryController.groovy
+        ├── OrderController.groovy
+        └── HealthController.groovy  ← /health probe, used as the deploy gate
 ```
+
+There is no `Application.groovy` and no Gradle build: Grails 2 packages a plain
+WAR that a servlet container starts.
 
 ---
 
@@ -319,5 +353,8 @@ grails-bookstore/
 | Concurrency | Pessimistic locking on stock decrement |
 | Error format | Consistent JSON envelope on all error responses |
 | Validation | GORM constraints enforced at save; business rules in services |
-| Logging | Standard Grails/Spring Boot logging (SLF4J) |
+| Logging | log4j 1.x via the Grails `Config.groovy` DSL; console plus a rolling file appender on a host volume that survives redeploys |
 | API versioning | All routes prefixed `/api/v1/` |
+| Health | `GET /health` reports process, database and build state (200/`UP`, 503/`DOWN`) |
+| Tests | 70 unit specs covering domain constraints, service logic and controller responses |
+| CI/CD | PRs gated on compile + tests; merges to `main` deploy automatically (see `CICD.md`) |

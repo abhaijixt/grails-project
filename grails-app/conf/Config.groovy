@@ -1,4 +1,13 @@
-grails.config.locations = []
+// Optional per-machine overrides (dev database password, local ports). Grails
+// logs a warning and carries on when the file is absent, which is the normal
+// case in CI and in the production container.
+grails.config.locations = [
+    "file:${System.getProperty('user.home')}/.grails/bookstore-local.groovy"
+]
+
+// Tomcat exports catalina.base; outside a container (grails run-app, tests)
+// fall back to the build directory so logging never writes outside the project.
+def logDirectory = System.getProperty('catalina.base') ? "${System.getProperty('catalina.base')}/logs" : 'target' 
 
 grails.mime.disable.accept.header.userAgents = ['Gecko', 'WebKit', 'Presto', 'Trident']
 grails.mime.types = [
@@ -53,6 +62,24 @@ environments {
 }
 
 log4j.main = {
+    appenders {
+        console name: 'stdout',
+                layout: pattern(conversionPattern: '%d{ISO8601} %-5p %c{2} - %m%n')
+
+        // Docker discards a container's stdout when the container is removed,
+        // and every deploy removes it. This file lives on a mounted volume so
+        // the logs outlive the release that wrote them.
+        rollingFile name: 'appLog',
+                    file: "${logDirectory}/grails-bookstore.log",
+                    maxFileSize: '10MB',
+                    maxBackupIndex: 10,
+                    layout: pattern(conversionPattern: '%d{ISO8601} %-5p %c{2} - %m%n')
+    }
+
+    root {
+        warn 'stdout', 'appLog'
+    }
+
     error 'org.codehaus.groovy.grails.web.servlet',
           'org.codehaus.groovy.grails.web.pages',
           'org.codehaus.groovy.grails.web.sitemesh',
@@ -66,6 +93,8 @@ log4j.main = {
           'net.sf.ehcache.hibernate'
 
     warn 'org.mortbay.log'
+
+    info 'com.learning.bookstore'
 
     debug 'grails.app'
 }

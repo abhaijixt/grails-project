@@ -17,13 +17,19 @@ hibernate {
     cache.use_query_cache = false
 }
 
+// No password appears in this file. Development reads it from DEV_DB_PASSWORD or
+// from the external config at ~/.grails/bookstore-local.groovy (wired up in
+// Config.groovy); production reads DB_PASSWORD from the container environment.
 environments {
     development {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:mariadb://localhost:3306/bookstore_db?createDatabaseIfNotExist=true&useSSL=false"
-            username = "developer"
-            password = "dev_password_123"
+            // A database of its own: development owns its schema (dbCreate
+            // rewrites it), and production must never be on the other end of
+            // that. They shared bookstore_db until 2026-08-29.
+            url = System.getenv("DEV_DB_URL") ?: "jdbc:mariadb://localhost:3306/bookstore_db_dev?createDatabaseIfNotExist=true&useSSL=false"
+            username = System.getenv("DEV_DB_USER") ?: "bookstore_dev"
+            password = System.getenv("DEV_DB_PASSWORD")
         }
     }
     test {
@@ -38,10 +44,12 @@ environments {
     }
     production {
         dataSource {
-            // dbCreate must be 'none' in production; run migrations explicitly
+            // dbCreate must be 'none' in production; run migrations explicitly.
+            // bookstore_app is granted DML only, so a stray dbCreate cannot
+            // reshape the schema even if this is changed by accident.
             dbCreate = "none"
             url = System.getenv("DB_URL") ?: "jdbc:mariadb://localhost:3306/bookstore_db?useSSL=false"
-            username = System.getenv("DB_USER") ?: "developer"
+            username = System.getenv("DB_USER") ?: "bookstore_app"
             password = System.getenv("DB_PASSWORD")
         }
     }
