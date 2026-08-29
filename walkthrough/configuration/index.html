@@ -487,10 +487,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-gradleproperties" class="md-nav__link">
+  <a href="#1-applicationproperties" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. gradle.properties
+        1. application.properties
       
     </span>
   </a>
@@ -498,10 +498,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-buildgradle" class="md-nav__link">
+  <a href="#2-buildconfiggroovy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. build.gradle
+        2. BuildConfig.groovy
       
     </span>
   </a>
@@ -509,10 +509,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-applicationyml" class="md-nav__link">
+  <a href="#3-datasourcegroovy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. application.yml
+        3. DataSource.groovy
       
     </span>
   </a>
@@ -520,10 +520,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-urlmappingsgroovy" class="md-nav__link">
+  <a href="#4-configgroovy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. UrlMappings.groovy
+        4. Config.groovy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-urlmappingsgroovy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. UrlMappings.groovy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-building-and-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Building and running
       
     </span>
   </a>
@@ -685,10 +707,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-gradleproperties" class="md-nav__link">
+  <a href="#1-applicationproperties" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. gradle.properties
+        1. application.properties
       
     </span>
   </a>
@@ -696,10 +718,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-buildgradle" class="md-nav__link">
+  <a href="#2-buildconfiggroovy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. build.gradle
+        2. BuildConfig.groovy
       
     </span>
   </a>
@@ -707,10 +729,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-applicationyml" class="md-nav__link">
+  <a href="#3-datasourcegroovy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. application.yml
+        3. DataSource.groovy
       
     </span>
   </a>
@@ -718,10 +740,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-urlmappingsgroovy" class="md-nav__link">
+  <a href="#4-configgroovy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. UrlMappings.groovy
+        4. Config.groovy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-urlmappingsgroovy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. UrlMappings.groovy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-building-and-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Building and running
       
     </span>
   </a>
@@ -749,145 +793,251 @@
 
 
 <h1 id="configuration-build">Configuration &amp; Build<a class="headerlink" href="#configuration-build" title="Permanent link">&para;</a></h1>
-<h2 id="1-gradleproperties">1. <code>gradle.properties</code><a class="headerlink" href="#1-gradleproperties" title="Permanent link">&para;</a></h2>
-<div class="language-properties highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="na">org.gradle.java.home</span><span class="o">=</span><span class="s">/usr/lib/jvm/java-17-openjdk   # Force Gradle to use Java 17</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">org.gradle.jvmargs</span><span class="o">=</span><span class="s">-Xmx2048m -Dfile.encoding=UTF-8  # 2 GB heap for the build daemon</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="na">grailsVersion</span><span class="o">=</span><span class="s">6.1.2           # Tells the Grails Gradle plugin which Grails BOM to use</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="na">gormVersion</span><span class="o">=</span><span class="s">8.1.1             # GORM version — controls hibernate plugin version resolution</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="na">grailsGradlePluginVersion</span><span class="o">=</span><span class="s">6.1.2</span>
-</span></code></pre></div>
-<p><strong>Why Java 17 specifically?</strong> Gradle 7.6.4 (which this project uses) officially supports Java 8–19. The system JDK is Java 26, which Gradle 7.x cannot run on. Pinning to Java 17 here makes <code>./gradlew</code> always use the right JDK regardless of the shell's JAVA_HOME.</p>
+<p>Grails 2.5.6 predates the Gradle-based Grails build entirely. There is no
+<code>build.gradle</code>, no <code>gradle.properties</code>, and no wrapper — the <code>grails</code> command is
+the build tool, and configuration lives in four Groovy files under
+<code>grails-app/conf/</code> plus <code>application.properties</code> at the project root.</p>
 <hr />
-<h2 id="2-buildgradle">2. <code>build.gradle</code><a class="headerlink" href="#2-buildgradle" title="Permanent link">&para;</a></h2>
-<div class="language-groovy highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">buildscript</span><span class="w"> </span><span class="o">{</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">        </span><span class="n">mavenCentral</span><span class="o">()</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">        </span><span class="n">maven</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="s2">&quot;https://repo.grails.org/grails/core&quot;</span><span class="w"> </span><span class="o">}</span><span class="w">   </span><span class="c1">// Grails artifacts live here</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="o">}</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="c1">// These three plugins wire up the entire Grails build pipeline</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="n">classpath</span><span class="w"> </span><span class="s2">&quot;org.grails:grails-gradle-plugin:6.1.2&quot;</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="n">classpath</span><span class="w"> </span><span class="s2">&quot;com.bertramlabs.plugins:asset-pipeline-gradle:4.3.0&quot;</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">        </span><span class="n">classpath</span><span class="w"> </span><span class="s2">&quot;org.springframework.boot:spring-boot-gradle-plugin:2.7.18&quot;</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="o">}</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="o">}</span>
+<h2 id="1-applicationproperties">1. <code>application.properties</code><a class="headerlink" href="#1-applicationproperties" title="Permanent link">&para;</a></h2>
+<div class="language-properties highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">#Grails Metadata file</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">app.grails.version</span><span class="o">=</span><span class="s">2.5.6</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="na">app.name</span><span class="o">=</span><span class="s">grails-bookstore</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="na">app.version</span><span class="o">=</span><span class="s">1.0.0</span>
 </span></code></pre></div>
-<p>The <code>buildscript</code> block is evaluated before the rest of <code>build.gradle</code>. The classpath entries here are the Gradle plugins themselves — not the application's runtime dependencies.</p>
-<div class="language-groovy highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">configurations</span><span class="w"> </span><span class="o">{</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="n">profile</span><span class="w">    </span><span class="c1">// Grails profile — declares this is a &#39;web&#39; application</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">console</span><span class="w">    </span><span class="c1">// Grails console (REPL) classpath</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="c1">// Note: &#39;developmentOnly&#39; and &#39;runtimeClasspath&#39; are intentionally NOT declared here.</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="c1">// Spring Boot&#39;s Gradle plugin creates them automatically.</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="c1">// Declaring them here again causes a &quot;configuration already exists&quot; build error.</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="o">}</span>
+<p>This is the project's identity file. Grails reads it at build time to pick the
+framework version, and at runtime into <code>grails.util.Metadata</code>, which is how
+<code>HealthController</code> reports what is running.</p>
+<p>The deploy pipeline appends three more keys before packaging (see
+<a href="https://github.com/abhaijixt/grails-project/blob/main/CICD.md">CI/CD</a>):</p>
+<div class="language-properties highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="na">app.commit</span><span class="o">=</span><span class="s">9f3c1ab…      # the commit the WAR was built from</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="na">app.build</span><span class="o">=</span><span class="s">42             # the GitHub Actions run number</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="na">app.builtAt</span><span class="o">=</span><span class="s">2026-08-29T04:44:34Z</span>
 </span></code></pre></div>
-<div class="language-groovy highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">apply</span><span class="w"> </span><span class="nl">plugin:</span><span class="w"> </span><span class="s2">&quot;org.grails.grails-web&quot;</span><span class="w">   </span><span class="c1">// Adds Groovy compilation, GORM, Spring MVC wiring</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">apply</span><span class="w"> </span><span class="nl">plugin:</span><span class="w"> </span><span class="s2">&quot;com.bertramlabs.asset-pipeline&quot;</span><span class="w">  </span><span class="c1">// Static asset compilation (CSS/JS)</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">apply</span><span class="w"> </span><span class="nl">plugin:</span><span class="w"> </span><span class="s2">&quot;war&quot;</span><span class="w">                     </span><span class="c1">// Packages as WAR file for servlet container deployment</span>
-</span></code></pre></div>
-<div class="language-groovy highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="n">profile</span><span class="w"> </span><span class="s2">&quot;org.grails.profiles:web&quot;</span><span class="w">                         </span><span class="c1">// Grails web profile BOM</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s2">&quot;org.grails:grails-core&quot;</span><span class="w">                   </span><span class="c1">// Core Grails runtime</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s2">&quot;org.grails:grails-plugin-rest&quot;</span><span class="w">            </span><span class="c1">// REST response rendering</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s2">&quot;org.grails.plugins:hibernate5&quot;</span><span class="w">            </span><span class="c1">// GORM-Hibernate5 bridge</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s2">&quot;org.hibernate:hibernate-core:5.6.15.Final&quot;</span><span class="c1">// JPA provider</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="n">runtimeOnly</span><span class="w"> </span><span class="s2">&quot;org.mariadb.jdbc:mariadb-java-client:3.3.3&quot;</span><span class="w">  </span><span class="c1">// MariaDB JDBC driver</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="n">runtimeOnly</span><span class="w"> </span><span class="s2">&quot;com.h2database:h2&quot;</span><span class="w">                           </span><span class="c1">// H2 for test environment</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="n">runtimeOnly</span><span class="w"> </span><span class="s2">&quot;org.apache.tomcat:tomcat-jdbc&quot;</span><span class="w">               </span><span class="c1">// Connection pool</span>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="n">testImplementation</span><span class="w"> </span><span class="s2">&quot;org.grails:grails-gorm-testing-support&quot;</span>
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="n">testImplementation</span><span class="w"> </span><span class="s2">&quot;org.grails:grails-web-testing-support&quot;</span>
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="o">}</span>
-</span></code></pre></div>
-<div class="language-groovy highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">bootRun</span><span class="w"> </span><span class="o">{</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">jvmArgs</span><span class="o">(</span><span class="s2">&quot;-Dspring.output.ansi.enabled=always&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;-noverify&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;-XX:TieredStopAtLevel=1&quot;</span><span class="o">)</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="c1">// -noverify and TieredStopAtLevel=1 make startup faster during development</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="n">sourceResources</span><span class="w"> </span><span class="n">sourceSets</span><span class="o">.</span><span class="na">main</span><span class="w">  </span><span class="c1">// Allows hot-reload of resources without recompile</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="o">}</span>
-</span></code></pre></div>
+<p>They are absent from a plain local build, and <code>/health</code> reports <code>unknown</code> for
+them — which is the correct answer for a WAR nobody can trace to a commit.</p>
 <hr />
-<h2 id="3-applicationyml">3. <code>application.yml</code><a class="headerlink" href="#3-applicationyml" title="Permanent link">&para;</a></h2>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">grails</span><span class="p">:</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">gorm</span><span class="p">:</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">failOnError</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">   </span><span class="c1"># GORM throws exception on save failure instead of returning false</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">                        </span><span class="c1"># Without this, book.save() silently does nothing on validation failure</span>
+<h2 id="2-buildconfiggroovy">2. <code>BuildConfig.groovy</code><a class="headerlink" href="#2-buildconfiggroovy" title="Permanent link">&para;</a></h2>
+<p>The Grails 2 equivalent of <code>build.gradle</code>: JVM targets, dependency resolution,
+and plugins.</p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// Grails 2.5.6 runs on JDK 7/8 only. Groovy 2.4.x cannot emit or run</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1">// bytecode above 1.8, so these levels must not be raised.</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">grails</span><span class="o">.</span><span class="na">project</span><span class="o">.</span><span class="na">target</span><span class="o">.</span><span class="na">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.7</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">grails</span><span class="o">.</span><span class="na">project</span><span class="o">.</span><span class="na">source</span><span class="o">.</span><span class="na">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.7</span>
 </span></code></pre></div>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">environments</span><span class="p">:</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">development</span><span class="p">:</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nt">dataSource</span><span class="p">:</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">      </span><span class="nt">dbCreate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">update</span><span class="w">   </span><span class="c1"># Hibernate auto-alters schema to match domain classes</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">                         </span><span class="c1"># Safe for dev; NEVER use in production (data loss risk)</span>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:mariadb://localhost:3306/bookstore_db?createDatabaseIfNotExist=true&amp;...</span>
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">developer</span>
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev_password_123</span>
-</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span><span class="nt">test</span><span class="p">:</span>
-</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span><span class="nt">dataSource</span><span class="p">:</span>
-</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">      </span><span class="nt">dbCreate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create-drop</span><span class="w">   </span><span class="c1"># Creates schema before tests, drops after — clean slate</span>
-</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:h2:mem:testDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE</span>
-</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">      </span><span class="nt">driverClassName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">org.h2.Driver</span>
-</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sa</span>
-</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">      </span><span class="nt">dialect</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">org.hibernate.dialect.H2Dialect</span>
-</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">  </span><span class="nt">production</span><span class="p">:</span>
-</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="nt">dataSource</span><span class="p">:</span>
-</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">      </span><span class="nt">dbCreate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span><span class="w">          </span><span class="c1"># Schema is NOT touched — migrations run separately</span>
-</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DB_URL:jdbc:mariadb://localhost:3306/bookstore_db?...}</span>
-</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DB_USER:developer}</span>
-</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DB_PASSWORD}</span><span class="w">    </span><span class="c1"># No default — must be set in environment</span>
-</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>
-</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="nt">dataSource</span><span class="p">:</span><span class="w">               </span><span class="c1"># Shared defaults applied to all environments</span>
-</span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a><span class="w">  </span><span class="nt">pooled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-</span><span id="__span-7-26"><a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a><span class="w">  </span><span class="nt">jmxExport</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-</span><span id="__span-7-27"><a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a><span class="w">  </span><span class="nt">driverClassName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">org.mariadb.jdbc.Driver</span>
-</span><span id="__span-7-28"><a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a><span class="w">  </span><span class="nt">dialect</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">org.hibernate.dialect.MariaDB103Dialect</span>
-</span><span id="__span-7-29"><a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a><span class="w">  </span><span class="nt">properties</span><span class="p">:</span>
-</span><span id="__span-7-30"><a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a><span class="w">    </span><span class="nt">initialSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w">        </span><span class="c1"># Connection pool opens 5 connections on startup</span>
-</span><span id="__span-7-31"><a id="__codelineno-7-31" name="__codelineno-7-31" href="#__codelineno-7-31"></a><span class="w">    </span><span class="nt">maxActive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span><span class="w">         </span><span class="c1"># Maximum concurrent connections</span>
+<p><strong>Why this matters more than it looks.</strong> The system JDK on the build machine is
+Java 26. Groovy 2.4 cannot run on it at all — not "with warnings", but a hard
+failure. Every build path (local, CI, deploy) pins <code>JAVA_HOME</code> to a JDK 8 and
+asserts the version before invoking <code>grails</code>.</p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">grails</span><span class="o">.</span><span class="na">project</span><span class="o">.</span><span class="na">fork</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="n">test</span><span class="w">   </span><span class="o">:</span><span class="w"> </span><span class="o">[</span><span class="nl">maxMemory:</span><span class="w"> </span><span class="mi">768</span><span class="o">,</span><span class="w"> </span><span class="nl">minMemory:</span><span class="w"> </span><span class="mi">64</span><span class="o">,</span><span class="w"> </span><span class="nl">debug:</span><span class="w"> </span><span class="kc">false</span><span class="o">,</span><span class="w"> </span><span class="nl">maxPerm:</span><span class="w"> </span><span class="mi">256</span><span class="o">,</span><span class="w"> </span><span class="nl">daemon:</span><span class="w"> </span><span class="kc">true</span><span class="o">],</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="n">run</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="o">[</span><span class="nl">maxMemory:</span><span class="w"> </span><span class="mi">768</span><span class="o">,</span><span class="w"> </span><span class="nl">minMemory:</span><span class="w"> </span><span class="mi">64</span><span class="o">,</span><span class="w"> </span><span class="nl">debug:</span><span class="w"> </span><span class="kc">false</span><span class="o">,</span><span class="w"> </span><span class="nl">maxPerm:</span><span class="w"> </span><span class="mi">256</span><span class="o">,</span><span class="w"> </span><span class="nl">forkReserve:</span><span class="w"> </span><span class="kc">false</span><span class="o">],</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="n">war</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="o">[</span><span class="nl">maxMemory:</span><span class="w"> </span><span class="mi">768</span><span class="o">,</span><span class="w"> </span><span class="nl">minMemory:</span><span class="w"> </span><span class="mi">64</span><span class="o">,</span><span class="w"> </span><span class="nl">debug:</span><span class="w"> </span><span class="kc">false</span><span class="o">,</span><span class="w"> </span><span class="nl">maxPerm:</span><span class="w"> </span><span class="mi">256</span><span class="o">,</span><span class="w"> </span><span class="nl">forkReserve:</span><span class="w"> </span><span class="kc">false</span><span class="o">],</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nl">console:</span><span class="w"> </span><span class="o">[</span><span class="nl">maxMemory:</span><span class="w"> </span><span class="mi">768</span><span class="o">,</span><span class="w"> </span><span class="nl">minMemory:</span><span class="w"> </span><span class="mi">64</span><span class="o">,</span><span class="w"> </span><span class="nl">debug:</span><span class="w"> </span><span class="kc">false</span><span class="o">,</span><span class="w"> </span><span class="nl">maxPerm:</span><span class="w"> </span><span class="mi">256</span><span class="o">]</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="o">]</span>
 </span></code></pre></div>
-<p><strong>How <code>${DB_URL:default}</code> works:</strong> This is Spring's <code>@Value</code>-style property substitution. If the environment variable <code>DB_URL</code> is set, it uses that. If not, it falls back to the default after the colon. In production, <code>DB_PASSWORD</code> has no default — the application will fail to start if the environment variable is missing, which is intentional (fail fast, not silently).</p>
+<p>Grails 2.3+ runs each command in a forked JVM so the build's classpath cannot
+leak into the application's. <code>maxPerm</code> is a PermGen setting — meaningless on
+Java 8, harmless to leave.</p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">grails</span><span class="o">.</span><span class="na">project</span><span class="o">.</span><span class="na">dependency</span><span class="o">.</span><span class="na">resolver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;maven&quot;</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">grails</span><span class="o">.</span><span class="na">project</span><span class="o">.</span><span class="na">dependency</span><span class="o">.</span><span class="na">resolution</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">        </span><span class="n">grailsCentral</span><span class="o">()</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">        </span><span class="n">mavenLocal</span><span class="o">()</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="n">mavenCentral</span><span class="o">()</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="n">mavenRepo</span><span class="w"> </span><span class="s2">&quot;https://repo.grails.org/grails/core&quot;</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">        </span><span class="n">mavenRepo</span><span class="w"> </span><span class="s2">&quot;https://repo.grails.org/grails/plugins&quot;</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="c1">// Legacy JDBC drivers: the 1.x MariaDB client is the last line that</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span><span class="c1">// targets the JDBC 4.1 surface Hibernate 3.6 expects.</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">        </span><span class="n">runtime</span><span class="w"> </span><span class="s2">&quot;org.mariadb.jdbc:mariadb-java-client:1.5.9&quot;</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">        </span><span class="n">runtime</span><span class="w"> </span><span class="s2">&quot;com.h2database:h2:1.3.176&quot;</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">    </span><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">        </span><span class="n">build</span><span class="w"> </span><span class="s2">&quot;:tomcat:8.0.50&quot;</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">        </span><span class="n">compile</span><span class="w"> </span><span class="s2">&quot;:cache:1.1.8&quot;</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">        </span><span class="c1">// Hibernate 3.6.10 via the Grails 2 hibernate plugin (GORM 3.x).</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">        </span><span class="n">runtime</span><span class="w"> </span><span class="s2">&quot;:hibernate:3.6.10.19&quot;</span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="o">}</span>
+</span></code></pre></div>
+<p>Two things are worth pausing on:</p>
+<ul>
+<li><strong>Plugins are dependencies here.</strong> In Grails 3+ a plugin is an ordinary Maven
+  artifact in <code>build.gradle</code>. In Grails 2 they are declared in their own
+  <code>plugins</code> block and resolved from the Grails plugin repository.</li>
+<li><strong>The driver version is deliberate, not stale.</strong> MariaDB client 2.x and later
+  implement JDBC 4.2, which Hibernate 3.6 does not understand. Upgrading it
+  breaks the application at runtime, not at compile time.</li>
+</ul>
 <hr />
-<h2 id="4-urlmappingsgroovy">4. <code>UrlMappings.groovy</code><a class="headerlink" href="#4-urlmappingsgroovy" title="Permanent link">&para;</a></h2>
-<div class="language-groovy highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">class</span><span class="w"> </span><span class="nc">UrlMappings</span><span class="w"> </span><span class="o">{</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">mappings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">        </span><span class="c1">// resources: &#39;book&#39; generates 7 routes in total:</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">        </span><span class="c1">//   GET    /api/v1/books           → index</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">        </span><span class="c1">//   POST   /api/v1/books           → save</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">        </span><span class="c1">//   GET    /api/v1/books/{id}      → show</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">        </span><span class="c1">//   PUT    /api/v1/books/{id}      → update  (PATCH also maps here)</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">        </span><span class="c1">//   DELETE /api/v1/books/{id}      → delete</span>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">        </span><span class="c1">//   GET    /api/v1/books/create    → create  (browser-form scaffold, unused here)</span>
-</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">        </span><span class="c1">//   GET    /api/v1/books/{id}/edit → edit    (browser-form scaffold, unused here)</span>
-</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">        </span><span class="c1">// The create and edit routes exist but are irrelevant in a JSON-only API</span>
-</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">        </span><span class="c1">// because static responseFormats = [&#39;json&#39;] on the controller rejects HTML requests.</span>
-</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">        </span><span class="s2">&quot;/api/v1/books&quot;</span><span class="o">(</span><span class="nl">resources:</span><span class="w"> </span><span class="s1">&#39;book&#39;</span><span class="o">)</span>
-</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>
-</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">        </span><span class="c1">// Custom routes that the &#39;resources&#39; shorthand doesn&#39;t cover</span>
-</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">        </span><span class="s2">&quot;/api/v1/books/search&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;book&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;search&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="o">)</span>
-</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">        </span><span class="s2">&quot;/api/v1/books/isbn/$isbn&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;book&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;findByIsbn&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="o">)</span>
-</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">        </span><span class="c1">// $isbn becomes params.isbn inside the controller action</span>
-</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">        </span><span class="s2">&quot;/api/v1/books/low-stock&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;book&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;lowStock&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="o">)</span>
-</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>
-</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="w">        </span><span class="s2">&quot;/api/v1/authors&quot;</span><span class="o">(</span><span class="nl">resources:</span><span class="w"> </span><span class="s1">&#39;author&#39;</span><span class="o">)</span><span class="w">     </span><span class="c1">// full CRUD</span>
-</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="w">        </span><span class="s2">&quot;/api/v1/categories&quot;</span><span class="o">(</span><span class="nl">resources:</span><span class="w"> </span><span class="s1">&#39;category&#39;</span><span class="o">)</span><span class="w"> </span><span class="c1">// full CRUD</span>
-</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>
-</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="w">        </span><span class="c1">// Orders: excludes: [&#39;delete&#39;] means DELETE /api/v1/orders/{id} is not routed.</span>
-</span><span id="__span-8-26"><a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="w">        </span><span class="c1">// Cancellation is an explicit business action, not a generic HTTP DELETE.</span>
-</span><span id="__span-8-27"><a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="w">        </span><span class="s2">&quot;/api/v1/orders&quot;</span><span class="o">(</span><span class="nl">resources:</span><span class="w"> </span><span class="s1">&#39;order&#39;</span><span class="o">,</span><span class="w"> </span><span class="nl">excludes:</span><span class="w"> </span><span class="o">[</span><span class="s1">&#39;delete&#39;</span><span class="o">])</span>
-</span><span id="__span-8-28"><a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a><span class="w">        </span><span class="s2">&quot;/api/v1/orders/$id/cancel&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;order&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;cancel&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;POST&quot;</span><span class="o">)</span>
-</span><span id="__span-8-29"><a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a><span class="w">        </span><span class="s2">&quot;/api/v1/orders/customer/$customerId&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;order&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;byCustomer&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="o">)</span>
-</span><span id="__span-8-30"><a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="w">        </span><span class="s2">&quot;/api/v1/orders/status/$status&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;order&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;byStatus&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="o">)</span>
-</span><span id="__span-8-31"><a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a><span class="w">        </span><span class="s2">&quot;/api/v1/orders/$id/status&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;order&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;updateStatus&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;PATCH&quot;</span><span class="o">)</span>
-</span><span id="__span-8-32"><a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a>
-</span><span id="__span-8-33"><a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a><span class="w">        </span><span class="s2">&quot;500&quot;</span><span class="o">(</span><span class="nl">view:</span><span class="w"> </span><span class="s1">&#39;/error&#39;</span><span class="o">)</span><span class="w">     </span><span class="c1">// Grails renders error.gsp for 500s</span>
-</span><span id="__span-8-34"><a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a><span class="w">        </span><span class="s2">&quot;404&quot;</span><span class="o">(</span><span class="nl">view:</span><span class="w"> </span><span class="s1">&#39;/notFound&#39;</span><span class="o">)</span><span class="w">  </span><span class="c1">// Grails renders notFound.gsp for 404s</span>
-</span><span id="__span-8-35"><a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a><span class="w">    </span><span class="o">}</span>
-</span><span id="__span-8-36"><a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a><span class="o">}</span>
+<h2 id="3-datasourcegroovy">3. <code>DataSource.groovy</code><a class="headerlink" href="#3-datasourcegroovy" title="Permanent link">&para;</a></h2>
+<p>Database configuration per environment. <strong>No credentials appear in this file.</strong></p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">dataSource</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">pooled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="n">jmxExport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="n">driverClassName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;org.mariadb.jdbc.Driver&quot;</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="c1">// Hibernate 3.6.10 ships no MariaDB dialect; MySQL5InnoDBDialect is the</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="c1">// supported way to talk to MariaDB from this Hibernate line.</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="n">dialect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;org.hibernate.dialect.MySQL5InnoDBDialect&quot;</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="n">properties</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">        </span><span class="n">jmxEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">        </span><span class="n">initialSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">        </span><span class="n">maxActive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="o">}</span>
 </span></code></pre></div>
-<p><strong>Why centralised routing matters:</strong> In Spring Boot, every controller method has its own <code>@GetMapping</code>/<code>@PostMapping</code> annotation. In Grails, all routes are in this one file. This makes it trivial to audit every endpoint the application exposes.</p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">environments</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="n">development</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">        </span><span class="n">dataSource</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">            </span><span class="n">dbCreate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;update&quot;</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">            </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="o">.</span><span class="na">getenv</span><span class="o">(</span><span class="s2">&quot;DEV_DB_URL&quot;</span><span class="o">)</span><span class="w"> </span><span class="o">?:</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">                </span><span class="s2">&quot;jdbc:mariadb://localhost:3306/bookstore_db_dev?createDatabaseIfNotExist=true&amp;useSSL=false&quot;</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">            </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="o">.</span><span class="na">getenv</span><span class="o">(</span><span class="s2">&quot;DEV_DB_USER&quot;</span><span class="o">)</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="s2">&quot;bookstore_dev&quot;</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">            </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="o">.</span><span class="na">getenv</span><span class="o">(</span><span class="s2">&quot;DEV_DB_PASSWORD&quot;</span><span class="o">)</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="o">}</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="n">test</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">        </span><span class="n">dataSource</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">            </span><span class="n">dbCreate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;create-drop&quot;</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">            </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;jdbc:h2:mem:testDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE&quot;</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">            </span><span class="n">driverClassName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;org.h2.Driver&quot;</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">            </span><span class="n">dialect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;org.hibernate.dialect.H2Dialect&quot;</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">            </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;sa&quot;</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">            </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">        </span><span class="o">}</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">    </span><span class="n">production</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">        </span><span class="n">dataSource</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="w">            </span><span class="n">dbCreate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;none&quot;</span>
+</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="w">            </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="o">.</span><span class="na">getenv</span><span class="o">(</span><span class="s2">&quot;DB_URL&quot;</span><span class="o">)</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="s2">&quot;jdbc:mariadb://localhost:3306/bookstore_db?useSSL=false&quot;</span>
+</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="w">            </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="o">.</span><span class="na">getenv</span><span class="o">(</span><span class="s2">&quot;DB_USER&quot;</span><span class="o">)</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="s2">&quot;bookstore_app&quot;</span>
+</span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="w">            </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="o">.</span><span class="na">getenv</span><span class="o">(</span><span class="s2">&quot;DB_PASSWORD&quot;</span><span class="o">)</span>
+</span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="w">        </span><span class="o">}</span>
+</span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-6-29"><a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a><span class="o">}</span>
+</span></code></pre></div>
+<p><strong>Development and production use different databases.</strong> <code>bookstore_db_dev</code> is
+owned by <code>bookstore_dev</code>; <code>bookstore_db</code> is reachable only by <code>bookstore_app</code>.
+They shared one database until 2026-08-29, which meant development's
+<code>dbCreate = "update"</code> was free to rewrite production's schema whenever a domain
+class changed.</p>
+<p><strong><code>dbCreate</code> is defence in depth, not the only defence.</strong> Production is <code>none</code>
+<em>and</em> the <code>bookstore_app</code> account holds <code>SELECT, INSERT, UPDATE, DELETE</code> with no
+DDL rights, so Hibernate could not alter the schema even if the setting were
+changed by accident.</p>
+<p><strong>Where the passwords come from.</strong> Development reads <code>DEV_DB_PASSWORD</code>, or the
+external config below. Production reads <code>DB_PASSWORD</code>, injected into the
+container by the deploy pipeline from a GitHub environment secret. Neither has a
+default: an unset password fails loudly rather than silently connecting as
+somebody else.</p>
+<hr />
+<h2 id="4-configgroovy">4. <code>Config.groovy</code><a class="headerlink" href="#4-configgroovy" title="Permanent link">&para;</a></h2>
+<p>Application configuration: content negotiation, GORM behaviour, and logging.</p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">// Optional per-machine overrides (dev database password, local ports). Grails</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1">// logs a warning and carries on when the file is absent, which is the normal</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1">// case in CI and in the production container.</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">grails</span><span class="o">.</span><span class="na">config</span><span class="o">.</span><span class="na">locations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="s2">&quot;file:${System.getProperty(&#39;user.home&#39;)}/.grails/bookstore-local.groovy&quot;</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="o">]</span>
+</span></code></pre></div>
+<p>External config is merged <em>over</em> everything in <code>grails-app/conf/</code>, and it is
+parsed per-environment, so a developer's local file can set
+<code>environments { development { dataSource.password = "…" } }</code> without touching
+the test or production settings. The file is outside the repository, so a
+password can never be committed by accident.</p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">// GORM: fail loudly on a save() of an invalid object</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">grails</span><span class="o">.</span><span class="na">gorm</span><span class="o">.</span><span class="na">failOnError</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</span></code></pre></div>
+<p>Without this, <code>book.save()</code> returns <code>null</code> on a validation failure and execution
+carries on as though the record were written.</p>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">log4j</span><span class="o">.</span><span class="na">main</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="n">appenders</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">        </span><span class="n">console</span><span class="w"> </span><span class="nl">name:</span><span class="w"> </span><span class="s1">&#39;stdout&#39;</span><span class="o">,</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">                </span><span class="nl">layout:</span><span class="w"> </span><span class="n">pattern</span><span class="o">(</span><span class="nl">conversionPattern:</span><span class="w"> </span><span class="s1">&#39;%d{ISO8601} %-5p %c{2} - %m%n&#39;</span><span class="o">)</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">        </span><span class="c1">// Docker discards a container&#39;s stdout when the container is removed,</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">        </span><span class="c1">// and every deploy removes it. This file lives on a mounted volume so</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">        </span><span class="c1">// the logs outlive the release that wrote them.</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">        </span><span class="n">rollingFile</span><span class="w"> </span><span class="nl">name:</span><span class="w"> </span><span class="s1">&#39;appLog&#39;</span><span class="o">,</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">                    </span><span class="nl">file:</span><span class="w"> </span><span class="s2">&quot;${logDirectory}/grails-bookstore.log&quot;</span><span class="o">,</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">                    </span><span class="nl">maxFileSize:</span><span class="w"> </span><span class="s1">&#39;10MB&#39;</span><span class="o">,</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">                    </span><span class="nl">maxBackupIndex:</span><span class="w"> </span><span class="mi">10</span><span class="o">,</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">                    </span><span class="nl">layout:</span><span class="w"> </span><span class="n">pattern</span><span class="o">(</span><span class="nl">conversionPattern:</span><span class="w"> </span><span class="s1">&#39;%d{ISO8601} %-5p %c{2} - %m%n&#39;</span><span class="o">)</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">    </span><span class="n">root</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">warn</span><span class="w"> </span><span class="s1">&#39;stdout&#39;</span><span class="o">,</span><span class="w"> </span><span class="s1">&#39;appLog&#39;</span><span class="w"> </span><span class="o">}</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">    </span><span class="n">info</span><span class="w"> </span><span class="s1">&#39;com.learning.bookstore&#39;</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">    </span><span class="n">debug</span><span class="w"> </span><span class="s1">&#39;grails.app&#39;</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="o">}</span>
+</span></code></pre></div>
+<p><code>logDirectory</code> resolves to <code>$catalina.base/logs</code> inside Tomcat and to <code>target/</code>
+outside it, so <code>grails run-app</code> and the test suite never write outside the
+project.</p>
+<p>Grails 2 uses <strong>log4j 1.x with a Groovy DSL</strong>, not Logback — the appender syntax
+here has no equivalent in a Grails 3+ <code>logback.groovy</code>.</p>
+<hr />
+<h2 id="5-urlmappingsgroovy">5. <code>UrlMappings.groovy</code><a class="headerlink" href="#5-urlmappingsgroovy" title="Permanent link">&para;</a></h2>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">class</span><span class="w"> </span><span class="nc">UrlMappings</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">mappings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">        </span><span class="c1">// Probed by the deploy pipeline and by anything watching the app.</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">        </span><span class="s2">&quot;/health&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;health&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;index&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="o">)</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">        </span><span class="s2">&quot;/api/v1/health&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;health&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;index&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="o">)</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">        </span><span class="c1">// resources: &#39;book&#39; generates 7 routes in total:</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">        </span><span class="c1">//   GET    /api/v1/books           → index</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">        </span><span class="c1">//   POST   /api/v1/books           → save</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">        </span><span class="c1">//   GET    /api/v1/books/{id}      → show</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">        </span><span class="c1">//   PUT    /api/v1/books/{id}      → update  (PATCH also maps here)</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">        </span><span class="c1">//   DELETE /api/v1/books/{id}      → delete</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">        </span><span class="c1">//   GET    /api/v1/books/create    → create  (browser-form scaffold, unused here)</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">        </span><span class="c1">//   GET    /api/v1/books/{id}/edit → edit    (browser-form scaffold, unused here)</span>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">        </span><span class="s2">&quot;/api/v1/books&quot;</span><span class="o">(</span><span class="nl">resources:</span><span class="w"> </span><span class="s1">&#39;book&#39;</span><span class="o">)</span>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>
+</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">        </span><span class="c1">// Custom routes that the &#39;resources&#39; shorthand doesn&#39;t cover</span>
+</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">        </span><span class="s2">&quot;/api/v1/books/search&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;book&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;search&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="o">)</span>
+</span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">        </span><span class="s2">&quot;/api/v1/books/isbn/$isbn&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;book&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;findByIsbn&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="o">)</span>
+</span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="w">        </span><span class="s2">&quot;/api/v1/books/low-stock&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;book&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;lowStock&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="o">)</span>
+</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>
+</span><span id="__span-10-22"><a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="w">        </span><span class="s2">&quot;/api/v1/authors&quot;</span><span class="o">(</span><span class="nl">resources:</span><span class="w"> </span><span class="s1">&#39;author&#39;</span><span class="o">)</span><span class="w">      </span><span class="c1">// full CRUD</span>
+</span><span id="__span-10-23"><a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="w">        </span><span class="s2">&quot;/api/v1/categories&quot;</span><span class="o">(</span><span class="nl">resources:</span><span class="w"> </span><span class="s1">&#39;category&#39;</span><span class="o">)</span><span class="w"> </span><span class="c1">// full CRUD</span>
+</span><span id="__span-10-24"><a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>
+</span><span id="__span-10-25"><a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="w">        </span><span class="c1">// Orders: excludes: [&#39;delete&#39;] means DELETE /api/v1/orders/{id} is not routed.</span>
+</span><span id="__span-10-26"><a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="w">        </span><span class="c1">// Cancellation is an explicit business action, not a generic HTTP DELETE.</span>
+</span><span id="__span-10-27"><a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="w">        </span><span class="s2">&quot;/api/v1/orders&quot;</span><span class="o">(</span><span class="nl">resources:</span><span class="w"> </span><span class="s1">&#39;order&#39;</span><span class="o">,</span><span class="w"> </span><span class="nl">excludes:</span><span class="w"> </span><span class="o">[</span><span class="s1">&#39;delete&#39;</span><span class="o">])</span>
+</span><span id="__span-10-28"><a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="w">        </span><span class="s2">&quot;/api/v1/orders/$id/cancel&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;order&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;cancel&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;POST&quot;</span><span class="o">)</span>
+</span><span id="__span-10-29"><a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="w">        </span><span class="s2">&quot;/api/v1/orders/customer/$customerId&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;order&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;byCustomer&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="o">)</span>
+</span><span id="__span-10-30"><a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="w">        </span><span class="s2">&quot;/api/v1/orders/status/$status&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;order&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;byStatus&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span><span class="o">)</span>
+</span><span id="__span-10-31"><a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="w">        </span><span class="s2">&quot;/api/v1/orders/$id/status&quot;</span><span class="o">(</span><span class="nl">controller:</span><span class="w"> </span><span class="s2">&quot;order&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">action:</span><span class="w"> </span><span class="s2">&quot;updateStatus&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">method:</span><span class="w"> </span><span class="s2">&quot;PATCH&quot;</span><span class="o">)</span>
+</span><span id="__span-10-32"><a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>
+</span><span id="__span-10-33"><a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a><span class="w">        </span><span class="s2">&quot;500&quot;</span><span class="o">(</span><span class="nl">view:</span><span class="w"> </span><span class="s1">&#39;/error&#39;</span><span class="o">)</span><span class="w">     </span><span class="c1">// Grails renders error.gsp for 500s</span>
+</span><span id="__span-10-34"><a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="w">        </span><span class="s2">&quot;404&quot;</span><span class="o">(</span><span class="nl">view:</span><span class="w"> </span><span class="s1">&#39;/notFound&#39;</span><span class="o">)</span><span class="w">  </span><span class="c1">// Grails renders notFound.gsp for 404s</span>
+</span><span id="__span-10-35"><a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a><span class="w">    </span><span class="o">}</span>
+</span><span id="__span-10-36"><a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a><span class="o">}</span>
+</span></code></pre></div>
+<p><strong>Why centralised routing matters:</strong> In Spring Boot, every controller method has
+its own <code>@GetMapping</code>/<code>@PostMapping</code> annotation. In Grails, all routes are in
+this one file. This makes it trivial to audit every endpoint the application
+exposes.</p>
+<p><strong>Note on the health path.</strong> The deployed WAR is <code>ROOT.war</code>, so the probe is at
+<code>http://localhost:8080/health</code>. Under <code>grails run-app</code> the application is served
+from a context path named after the project, so the same route is at
+<code>http://localhost:8080/grails-bookstore/health</code>.</p>
+<hr />
+<h2 id="6-building-and-running">6. Building and running<a class="headerlink" href="#6-building-and-running" title="Permanent link">&para;</a></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">JAVA_HOME</span><span class="o">=</span>~/.sdkman/candidates/java/current<span class="w">        </span><span class="c1"># JDK 8</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$JAVA_HOME</span><span class="s2">/bin:</span><span class="nv">$HOME</span><span class="s2">/.sdkman/candidates/grails/current/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>grails<span class="w"> </span>--non-interactive<span class="w"> </span>compile<span class="w">           </span><span class="c1"># compile only</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>grails<span class="w"> </span>--non-interactive<span class="w"> </span>test-app<span class="w"> </span>unit:<span class="w">    </span><span class="c1"># 70 unit tests</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>grails<span class="w"> </span>--non-interactive<span class="w"> </span>prod<span class="w"> </span>war<span class="w"> </span>target/grails-bookstore.war
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>grails<span class="w"> </span>run-app<span class="w">                             </span><span class="c1"># development, on the dev database</span>
+</span></code></pre></div>
+<p>There is no wrapper to commit and no daemon to warm up; the <code>grails</code> command
+resolves everything through Ivy into <code>~/.grails</code>.</p>
 
 
 

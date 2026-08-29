@@ -1018,22 +1018,22 @@
 <tr>
 <td>Language</td>
 <td>Apache Groovy</td>
-<td>4.x (managed by Grails)</td>
+<td>2.4.x (managed by Grails)</td>
 </tr>
 <tr>
 <td>Framework</td>
 <td>Grails</td>
-<td>6.1.2</td>
+<td>2.5.6</td>
 </tr>
 <tr>
 <td>Runtime</td>
-<td>Spring Boot</td>
-<td>2.7.18</td>
+<td>Servlet container (no embedded runtime)</td>
+<td>Servlet 3.0</td>
 </tr>
 <tr>
 <td>ORM</td>
 <td>GORM + Hibernate</td>
-<td>8.1.1 / 5.6.15</td>
+<td>3.x / 3.6.10</td>
 </tr>
 <tr>
 <td>Database (dev/prod)</td>
@@ -1043,25 +1043,38 @@
 <tr>
 <td>Database (test)</td>
 <td>H2 in-memory</td>
-<td>—</td>
+<td>1.3.176</td>
+</tr>
+<tr>
+<td>JDBC driver</td>
+<td>MariaDB Java client</td>
+<td>1.5.9 (JDBC 4.1)</td>
 </tr>
 <tr>
 <td>Build</td>
-<td>Gradle + Wrapper</td>
-<td>7.6.4</td>
+<td><code>grails</code> CLI + Ivy</td>
+<td>2.5.6</td>
 </tr>
 <tr>
 <td>JVM</td>
 <td>OpenJDK</td>
-<td>17</td>
+<td>8</td>
 </tr>
 <tr>
 <td>Packaging</td>
 <td>WAR</td>
 <td>—</td>
 </tr>
+<tr>
+<td>Deployment runtime</td>
+<td>Tomcat (container image)</td>
+<td>8.5 / JRE 8</td>
+</tr>
 </tbody>
 </table>
+<p><strong>The JDK 8 pin is load-bearing.</strong> Groovy 2.4 cannot emit or run bytecode above
+1.8 and will not start on a newer JVM, so every build path asserts the Java
+version before invoking <code>grails</code>.</p>
 <hr />
 <h2 id="3-system-context">3. System Context<a class="headerlink" href="#3-system-context" title="Permanent link">&para;</a></h2>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────────────┐
@@ -1444,65 +1457,94 @@
 <th>Environment</th>
 <th>Database</th>
 <th>DDL Strategy</th>
-<th>Credentials</th>
+<th>Account</th>
+<th>Password source</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>development</code></td>
-<td>MariaDB <code>localhost:3306/bookstore_db</code></td>
+<td>MariaDB <code>localhost:3306/bookstore_db_dev</code></td>
 <td><code>update</code></td>
-<td><code>developer</code> / <code>dev_password_123</code></td>
+<td><code>bookstore_dev</code> (all privileges on that database)</td>
+<td><code>DEV_DB_PASSWORD</code>, or <code>~/.grails/bookstore-local.groovy</code></td>
 </tr>
 <tr>
 <td><code>test</code></td>
 <td>H2 in-memory</td>
 <td><code>create-drop</code></td>
-<td><code>sa</code> / <code>""</code></td>
+<td><code>sa</code></td>
+<td>none needed</td>
 </tr>
 <tr>
 <td><code>production</code></td>
-<td>MariaDB via <code>$DB_URL</code></td>
+<td>MariaDB <code>localhost:3306/bookstore_db</code></td>
 <td><code>none</code></td>
-<td><code>$DB_USER</code> / <code>$DB_PASSWORD</code></td>
+<td><code>bookstore_app</code> (DML only)</td>
+<td><code>DB_PASSWORD</code> from the deploy environment</td>
 </tr>
 </tbody>
 </table>
-<p><code>dbCreate: none</code> in production means Hibernate will not auto-alter the schema. Schema changes must be applied through migration scripts manually before deployment.</p>
+<p><strong>Development and production are separate databases.</strong> They shared
+<code>bookstore_db</code> until 2026-08-29, which meant development's <code>dbCreate = "update"</code>
+could rewrite production's schema whenever a domain class changed.</p>
+<p><strong>No credentials live in the repository.</strong> <code>DataSource.groovy</code> reads every
+password from the environment or from an external config file outside the
+project tree.</p>
+<p><code>dbCreate: none</code> in production means Hibernate will not auto-alter the schema,
+and the <code>bookstore_app</code> account holds no <code>CREATE</code>, <code>ALTER</code> or <code>DROP</code> rights, so
+it could not do so even if the setting changed. Schema changes must be applied
+deliberately before the deploy that needs them — there is currently no migration
+tooling in the project.</p>
 <hr />
 <h2 id="10-project-file-structure">10. Project File Structure<a class="headerlink" href="#10-project-file-structure" title="Permanent link">&para;</a></h2>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>grails-bookstore/
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>├── docs/                        ← Design documents (HLD, LLD, Code Walkthrough)
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>├── gradle/wrapper/              ← Gradle 7.6.4 wrapper
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>├── gradle.properties            ← Java 17, grailsVersion, gormVersion
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>├── build.gradle                 ← Dependencies, plugins
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>├── settings.gradle              ← Root project name
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>└── grails-app/
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    ├── conf/
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    │   ├── application.yml      ← DB config per environment
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    │   └── UrlMappings.groovy   ← All REST routes
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    ├── domain/com/learning/bookstore/
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>    │   ├── Book.groovy
-</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>    │   ├── Author.groovy
-</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    │   ├── Category.groovy
-</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    │   ├── Customer.groovy
-</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    │   ├── BookOrder.groovy
-</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>    │   ├── OrderItem.groovy
-</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    │   ├── OrderStatus.groovy   ← Enum with state machine
-</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    │   └── CustomerStatus.groovy
-</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>    ├── services/com/learning/bookstore/
-</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>    │   ├── BookService.groovy
-</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>    │   ├── OrderService.groovy
-</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>    │   ├── AuthorService.groovy
-</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>    │   └── ApiResponseService.groovy
-</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>    ├── controllers/com/learning/bookstore/
-</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>    │   ├── BookController.groovy
-</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>    │   ├── AuthorController.groovy
-</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>    │   ├── CategoryController.groovy
-</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>    │   └── OrderController.groovy
-</span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>    └── init/com/learning/bookstore/
-</span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>        └── Application.groovy   ← Spring Boot entry point
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>├── application.properties       ← Grails version, app name, build stamp
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>├── CICD.md                      ← Pipeline: CI, deploy, security model
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>├── DEPLOY-LOCAL.md              ← Deployment target detail
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>├── .github/workflows/
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>│   ├── ci.yml                   ← Compile, test, package (hosted runners)
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>│   ├── deploy-local.yml         ← Build and deploy (self-hosted runner)
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>│   └── deploy-docs.yml          ← This documentation site
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>├── scripts/
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>│   ├── deploy-local.sh          ← Releases, container lifecycle, health gate
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>│   ├── stamp-build-metadata.sh  ← Commit/build stamp into application.properties
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>│   ├── notify-failure.sh        ← Failure log + desktop notification
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>│   └── setup-self-hosted-runner.sh
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>├── web-app/WEB-INF/             ← applicationContext.xml, sitemesh.xml
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>├── test/unit/com/learning/bookstore/
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>│   └── *Spec.groovy             ← 70 unit tests
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>└── grails-app/
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    ├── conf/
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>    │   ├── BuildConfig.groovy   ← Dependencies, plugins, JVM targets
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>    │   ├── DataSource.groovy    ← DB config per environment (no credentials)
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>    │   ├── Config.groovy        ← App config, external config, log4j
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>    │   ├── BootStrap.groovy     ← Lifecycle hooks
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>    │   └── UrlMappings.groovy   ← All REST routes
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>    ├── domain/com/learning/bookstore/
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>    │   ├── Book.groovy
+</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>    │   ├── Author.groovy
+</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>    │   ├── Category.groovy
+</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>    │   ├── Customer.groovy
+</span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>    │   ├── BookOrder.groovy
+</span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>    │   ├── OrderItem.groovy
+</span><span id="__span-5-32"><a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>    │   ├── OrderStatus.groovy   ← Enum with state machine
+</span><span id="__span-5-33"><a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>    │   └── CustomerStatus.groovy
+</span><span id="__span-5-34"><a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a>    ├── services/com/learning/bookstore/
+</span><span id="__span-5-35"><a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>    │   ├── BookService.groovy
+</span><span id="__span-5-36"><a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>    │   ├── OrderService.groovy
+</span><span id="__span-5-37"><a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a>    │   ├── AuthorService.groovy
+</span><span id="__span-5-38"><a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a>    │   └── ApiResponseService.groovy
+</span><span id="__span-5-39"><a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a>    └── controllers/com/learning/bookstore/
+</span><span id="__span-5-40"><a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a>        ├── BookController.groovy
+</span><span id="__span-5-41"><a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a>        ├── AuthorController.groovy
+</span><span id="__span-5-42"><a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a>        ├── CategoryController.groovy
+</span><span id="__span-5-43"><a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a>        ├── OrderController.groovy
+</span><span id="__span-5-44"><a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a>        └── HealthController.groovy  ← /health probe, used as the deploy gate
 </span></code></pre></div>
+<p>There is no <code>Application.groovy</code> and no Gradle build: Grails 2 packages a plain
+WAR that a servlet container starts.</p>
 <hr />
 <h2 id="11-non-functional-characteristics">11. Non-Functional Characteristics<a class="headerlink" href="#11-non-functional-characteristics" title="Permanent link">&para;</a></h2>
 <table>
@@ -1535,11 +1577,23 @@
 </tr>
 <tr>
 <td>Logging</td>
-<td>Standard Grails/Spring Boot logging (SLF4J)</td>
+<td>log4j 1.x via the Grails <code>Config.groovy</code> DSL; console plus a rolling file appender on a host volume that survives redeploys</td>
 </tr>
 <tr>
 <td>API versioning</td>
 <td>All routes prefixed <code>/api/v1/</code></td>
+</tr>
+<tr>
+<td>Health</td>
+<td><code>GET /health</code> reports process, database and build state (200/<code>UP</code>, 503/<code>DOWN</code>)</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td>70 unit specs covering domain constraints, service logic and controller responses</td>
+</tr>
+<tr>
+<td>CI/CD</td>
+<td>PRs gated on compile + tests; merges to <code>main</code> deploy automatically (see <code>CICD.md</code>)</td>
 </tr>
 </tbody>
 </table>

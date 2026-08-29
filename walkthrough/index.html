@@ -639,30 +639,32 @@
 <p>This document walks through every source file in the project in reading order — from the bottom of the stack (domain) upward to the top (controllers). For each file, the full code is explained line by line where it matters.</p>
 <hr />
 <h2 id="reading-order">Reading Order<a class="headerlink" href="#reading-order" title="Permanent link">&para;</a></h2>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>1. gradle.properties          ← JVM and Grails version pins
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>2. build.gradle               ← Dependencies and plugins
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>3. application.yml            ← Database configuration
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>4. UrlMappings.groovy         ← All REST routes in one place
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>5. Domain classes             ← Data model and rules
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>   5a. OrderStatus.groovy     ← State machine enum
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>   5b. CustomerStatus.groovy
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>   5c. Category.groovy
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>   5d. Author.groovy
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>   5e. Customer.groovy
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>   5f. Book.groovy
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>   5g. OrderItem.groovy
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>   5h. BookOrder.groovy
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>6. Services                   ← Business logic
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>   6a. ApiResponseService.groovy
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>   6b. AuthorService.groovy
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>   6c. BookService.groovy
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>   6d. OrderService.groovy
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>7. Controllers                ← HTTP layer
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>   7a. AuthorController.groovy
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>   7b. CategoryController.groovy
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>   7c. BookController.groovy
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>   7d. OrderController.groovy
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>8. Application.groovy         ← Entry point
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>1. application.properties     ← Grails version and app identity
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>2. BuildConfig.groovy         ← Dependencies, plugins, JVM targets
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>3. DataSource.groovy          ← Per-environment database configuration
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>4. Config.groovy              ← App config, external config, log4j
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>5. UrlMappings.groovy         ← All REST routes in one place
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>6. Domain classes             ← Data model and rules
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>   6a. OrderStatus.groovy     ← State machine enum
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>   6b. CustomerStatus.groovy
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>   6c. Category.groovy
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>   6d. Author.groovy
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>   6e. Customer.groovy
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>   6f. Book.groovy
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>   6g. OrderItem.groovy
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>   6h. BookOrder.groovy
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>7. Services                   ← Business logic
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>   7a. ApiResponseService.groovy
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>   7b. AuthorService.groovy
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>   7c. BookService.groovy
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>   7d. OrderService.groovy
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>8. Controllers                ← HTTP layer
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>   8a. AuthorController.groovy
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>   8b. CategoryController.groovy
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>   8c. BookController.groovy
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>   8d. OrderController.groovy
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>   8e. HealthController.groovy
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>9. BootStrap.groovy           ← Lifecycle hooks (there is no Application.groovy)
 </span></code></pre></div>
 <hr />
 <h2 id="pages-in-this-walkthrough">Pages in This Walkthrough<a class="headerlink" href="#pages-in-this-walkthrough" title="Permanent link">&para;</a></h2>
@@ -679,27 +681,27 @@
 <tr>
 <td>1</td>
 <td><a href="configuration/">Configuration &amp; Build</a></td>
-<td><code>gradle.properties</code>, <code>build.gradle</code>, <code>application.yml</code>, <code>UrlMappings.groovy</code></td>
+<td><code>application.properties</code>, <code>BuildConfig.groovy</code>, <code>DataSource.groovy</code>, <code>Config.groovy</code>, <code>UrlMappings.groovy</code></td>
 </tr>
 <tr>
 <td>2</td>
 <td><a href="domain/">Domain Layer</a></td>
-<td>All eight domain classes and enums (5a–5h)</td>
+<td>All eight domain classes and enums (6a–6h)</td>
 </tr>
 <tr>
 <td>3</td>
 <td><a href="services/">Service Layer</a></td>
-<td><code>ApiResponseService</code>, <code>AuthorService</code>, <code>BookService</code>, <code>OrderService</code> (6a–6d)</td>
+<td><code>ApiResponseService</code>, <code>AuthorService</code>, <code>BookService</code>, <code>OrderService</code> (7a–7d)</td>
 </tr>
 <tr>
 <td>4</td>
 <td><a href="controllers/">Controller Layer</a></td>
-<td><code>AuthorController</code>, <code>CategoryController</code>, <code>BookController</code>, <code>OrderController</code> (7a–7d)</td>
+<td><code>AuthorController</code>, <code>CategoryController</code>, <code>BookController</code>, <code>OrderController</code> (8a–8d)</td>
 </tr>
 <tr>
 <td>5</td>
 <td><a href="entry-point/">Entry Point &amp; Key Patterns</a></td>
-<td><code>Application.groovy</code> and the patterns summary</td>
+<td><code>BootStrap.groovy</code>, <code>HealthController</code>, and the patterns summary</td>
 </tr>
 </tbody>
 </table>

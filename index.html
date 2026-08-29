@@ -701,13 +701,24 @@
 
 
 <h1 id="grails-bookstore">Grails Bookstore<a class="headerlink" href="#grails-bookstore" title="Permanent link">&para;</a></h1>
-<p>A RESTful back-end API for a bookstore, built with Grails 6.1.2 on Spring Boot 2.7 and Groovy, persisting through GORM/Hibernate to MariaDB (H2 in tests). There is no front-end — every endpoint under <code>/api/v1/</code> speaks JSON, wrapped in a consistent <code>success</code> / <code>message</code> / <code>data</code> / <code>timestamp</code> envelope. It manages books, authors, categories, customers, and orders, with real business rules behind them: pessimistic locking on stock decrement, an order state machine that rejects invalid transitions, price snapshots on order lines, and referential-integrity guards in the service layer.</p>
+<p>A RESTful back-end API for a bookstore, built with Grails 2.5.6 and Groovy 2.4, persisting through GORM/Hibernate to MariaDB (H2 in tests). There is no front-end — every endpoint under <code>/api/v1/</code> speaks JSON, wrapped in a consistent <code>success</code> / <code>message</code> / <code>data</code> / <code>timestamp</code> envelope. It manages books, authors, categories, customers, and orders, with real business rules behind them: pessimistic locking on stock decrement, an order state machine that rejects invalid transitions, price snapshots on order lines, and referential-integrity guards in the service layer.</p>
 <h2 id="running-the-app">Running the App<a class="headerlink" href="#running-the-app" title="Permanent link">&para;</a></h2>
-<p>The Gradle wrapper is committed, so no local Gradle install is needed:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>grails-bookstore
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./gradlew<span class="w"> </span>bootRun
+<p>Grails 2.5.6 is the build tool — there is no Gradle wrapper. It needs <strong>JDK 8</strong>;
+Groovy 2.4 cannot run on a newer JVM.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">JAVA_HOME</span><span class="o">=</span>~/.sdkman/candidates/java/current<span class="w">   </span><span class="c1"># a JDK 8</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$JAVA_HOME</span><span class="s2">/bin:</span><span class="nv">$HOME</span><span class="s2">/.sdkman/candidates/grails/current/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">cd</span><span class="w"> </span>grails-bookstore
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>grails<span class="w"> </span>run-app
 </span></code></pre></div>
-<p>The API comes up on <code>http://localhost:8080</code>. The <code>development</code> environment expects MariaDB at <code>localhost:3306/bookstore_db</code>; see <a href="HLD/#9-configuration-environments">Configuration Environments</a> for the per-environment database settings.</p>
+<p>The API comes up on <code>http://localhost:8080/grails-bookstore/</code>, and the health
+probe at <code>/grails-bookstore/health</code> reports whether the database is reachable.
+The <code>development</code> environment expects MariaDB at <code>localhost:3306/bookstore_db_dev</code>
+— a different database from production — with the password supplied outside the
+repository. See <a href="HLD/#9-configuration-environments">Configuration Environments</a>
+for the full matrix.</p>
+<p>The deployed WAR is packaged as <code>ROOT.war</code>, so in production the same routes sit
+at the server root: <code>http://localhost:8080/health</code>.</p>
 <h2 id="the-documentation">The Documentation<a class="headerlink" href="#the-documentation" title="Permanent link">&para;</a></h2>
 <p>Three documents describe this codebase at three different altitudes. <strong>Read them in this order</strong> — each assumes the one before it.</p>
 <div class="grid cards">
