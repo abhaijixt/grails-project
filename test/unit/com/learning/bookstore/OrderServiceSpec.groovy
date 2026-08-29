@@ -149,4 +149,33 @@ class OrderServiceSpec extends Specification {
         IllegalArgumentException e = thrown()
         e.message.contains("Cannot cancel")
     }
+
+    // CANCELLED is reachable from two routes: cancel() and updateStatus(). Both must
+    // return the reserved stock, or inventory is destroyed by whichever one forgets.
+    void "cancelling through updateStatus also restores stock"() {
+        given:
+        BookOrder order = service.place([customerId: customer.id, items: [[bookId: book.id, quantity: 4]]])
+        assert book.stockQuantity == 6
+
+        when:
+        service.updateStatus(order.id, OrderStatus.CANCELLED)
+
+        then:
+        order.status == OrderStatus.CANCELLED
+        book.stockQuantity == 10
+    }
+
+    void "the two cancellation routes leave stock in the same state"() {
+        given:
+        BookOrder viaCancel = service.place([customerId: customer.id, items: [[bookId: book.id, quantity: 3]]])
+        service.cancel(viaCancel.id, "reason")
+        Integer afterCancel = book.stockQuantity
+
+        and:
+        BookOrder viaStatus = service.place([customerId: customer.id, items: [[bookId: book.id, quantity: 3]]])
+        service.updateStatus(viaStatus.id, OrderStatus.CANCELLED)
+
+        expect:
+        book.stockQuantity == afterCancel
+    }
 }
